@@ -1,3 +1,9 @@
-export default function Home() {
-  return <h1>WAHED KOUDSI</h1>;
+function Home() {
+  return (
+    <div>
+      <h1>Wahed</h1>
+    </div>
+  );
 }
+
+export default Home;

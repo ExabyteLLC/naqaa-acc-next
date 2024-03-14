@@ -1,11 +1,37 @@
-import { Form, Input } from "antd";
+import { Form, Input, Select } from "antd";
 import useTranslation from "../../models/translation";
 import AppFormModal from "../modals/formModal";
+import { useState } from "react";
+import { serialize } from "object-to-formdata";
+import myFetch from "../../models/fetch";
 
 const PaymentTypeModal = ({ fetchFn }) => {
   const { t } = useTranslation();
+  const [dataStatus, setDataStatus] = useState(null);
+  const [open, setOpen] = useState(false);
+
+  const sendData = async (values) => {
+    var fd = serialize(values);
+    setDataStatus("loading")
+    myFetch("/admin/accounting/payments/types/add", {
+      body: fd,
+      onLoad: (res, data) => {
+        if (!res.ok) {
+          setDataStatus("error");
+          return;
+        }
+        if (data.status != 200) {
+          setDataStatus("error");
+          return;
+        }
+        setDataStatus("fetched");
+        setOpen(false);
+      },
+    });
+  };
+
   const onFinish = (values) => {
-    console.log("Success:", values);
+    sendData(values);
   };
   const onFinishFailed = (errorInfo) => {
     console.log("Failed:", errorInfo);
@@ -13,18 +39,22 @@ const PaymentTypeModal = ({ fetchFn }) => {
 
   return (
     <AppFormModal
+      open={open}
+      onOpen={() => setOpen(true)}
+      onClose={() => setOpen(false)}
       fetchFn={fetchFn}
       title={t("add-payment-type")}
       onFinish={onFinish}
       onFinishFailed={onFinishFailed}
+      loading={dataStatus === "loading"}
     >
       <Form.Item
-        label="Username"
-        name="username"
+        label="name"
+        name="name"
         rules={[
           {
             required: true,
-            message: "Please input your username!",
+            message: "Please input your name!",
           },
         ]}
       >
@@ -32,16 +62,19 @@ const PaymentTypeModal = ({ fetchFn }) => {
       </Form.Item>
 
       <Form.Item
-        label="Password"
-        name="password"
+        label="status"
+        name="active"
         rules={[
           {
             required: true,
-            message: "Please input your password!",
+            message: "Please input your status!",
           },
         ]}
       >
-        <Input.Password />
+        <Select>
+          <Select.Option value="1">Active</Select.Option>
+          <Select.Option value="0">Inactive</Select.Option>
+        </Select>
       </Form.Item>
     </AppFormModal>
   );

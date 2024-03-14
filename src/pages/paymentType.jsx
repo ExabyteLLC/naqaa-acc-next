@@ -2,32 +2,32 @@ import { Button, Flex, Input, Space, Table, Typography } from "antd";
 import useTranslation from "../models/translation";
 import { Content } from "antd/es/layout/layout";
 import { useEffect, useRef, useState } from "react";
-import { SearchOutlined } from "@ant-design/icons";
+import { DeleteFilled, EditFilled, SearchOutlined } from "@ant-design/icons";
 import PaymentTypeModal from "../assets/components/paymentTypeModal";
+import myFetch from "../models/fetch";
 const { Title } = Typography;
 
 const PaymentTypePage = () => {
   const [dataStatus, setDataStatus] = useState(null);
   const [paymentData, setpaymentData] = useState([]);
   const { t } = useTranslation();
-  const URL =
-    "https://development.exabyte-eg.com/explorer/__/elshall/BeyondQuality-Api/";
-  const uId = "?UID=SGhoT1k2em9VMkh0dkp0MjozaHdmcnlxdWxhSS9uN0V3WWtZRUpRPT0=";
 
-  const fetchingData = async () => {
+  const fetchingData = () => {
     setDataStatus("loading");
-    const res = await fetch(URL + "/admin/accounting/payments/types/get" + uId);
-    if (!res.ok) {
-      setDataStatus("error");
-      return;
-    }
-    const data = await res.json();
-    if (data.statusText !== "OK") {
-      setDataStatus("error");
-      return;
-    }
-    setDataStatus("fetched");
-    setpaymentData(data);
+    myFetch("/admin/accounting/payments/types/get", {
+      onLoad: (res, data) => {
+        if (!res.ok) {
+          setDataStatus("error");
+          return;
+        }
+        if (data.statusText !== "OK") {
+          setDataStatus("error");
+          return;
+        }
+        setDataStatus("fetched");
+        setpaymentData(data);
+      },
+    });
   };
 
   useEffect(() => {
@@ -146,11 +146,12 @@ const PaymentTypePage = () => {
       };
   };
 
-  const col = ({ title, key, search = true }) => {
+  const col = ({ title, key, search = true, render }) => {
     return {
       title: t(title),
       dataIndex: key ?? title,
       key: key ?? title,
+      render: render ?? null,
       ...getColumnSearchProps(key ?? title, search),
     };
   };
@@ -161,7 +162,22 @@ const PaymentTypePage = () => {
     { title: "status", key: "active" },
     { title: "added-date", key: "addstamp" },
     { title: "last-modified", key: "updatestamp" },
-    { title: "edit-delete", search: false },
+    {
+      title: "edit-delete",
+      search: false,
+      render: () => (
+        <>
+          <Flex align="center" justify="space-around">
+            <Button type="link">
+              <EditFilled />
+            </Button>
+            <Button type="link">
+              <DeleteFilled />
+            </Button>
+          </Flex>
+        </>
+      ),
+    },
   ].map((column) => col(column));
   const data = paymentData ? paymentData?.data : [];
 

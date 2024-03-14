@@ -1,56 +1,43 @@
-import { useEffect, useState } from "react";
 import { Button, Form, Modal } from "antd";
 import useTranslation from "../../models/translation";
 
-const AppFormModal = ({ title, onFinish, onFinishFailed, submitted,children }) => {
-  const [isModalOpen, setIsModalOpen] = useState(false);
-
-  useEffect(()=>{
-if(submitted) setIsModalOpen(false);
-  },[submitted])
-
-  const showModal = () => {
-    setIsModalOpen(true);
-  };
-  
-  const handleCancel = () => {
-    setIsModalOpen(false);
-  };
+const AppFormModal = ({
+  open,
+  onOpen,
+  onClose,
+  title,
+  onFinish,
+  onFinishFailed,
+  children,
+  loading
+}) => {
   const { t } = useTranslation();
   return (
     <>
-      <Button type="primary" onClick={showModal}>
+      <Button type="primary" onClick={onOpen}>
         {title}
       </Button>
       <Modal
         title={title}
-        open={isModalOpen}
-        onCancel={handleCancel}
+        open={open}
+        onCancel={onClose}
         footer={[
           <Button
             key="submit"
             htmlType="submit"
             form={`form-${title}`}
             type="primary"
+            loading={loading}
           >
             {t("add")}
           </Button>,
-          <Button key="back" onClick={handleCancel}>
+          <Button key="back" onClick={onClose} 
+          loading={loading}>
             {t("cancel")}
           </Button>,
         ]}
       >
         <Form
-          name="basic"
-          labelCol={{
-            span: 8,
-          }}
-          wrapperCol={{
-            span: 16,
-          }}
-          style={{
-            maxWidth: 600,
-          }}
           initialValues={{
             remember: true,
           }}
@@ -58,6 +45,7 @@ if(submitted) setIsModalOpen(false);
           onFinishFailed={onFinishFailed}
           autoComplete="off"
           id={`form-${title}`}
+          layout="vertical"
         >
           {children}
         </Form>

@@ -1128,5 +1128,6 @@
   "balance-sheet-list": "قائمة الميزانية العمومية",
   "assets-types": "انواع الاصول",
   "last-year": "السنة الماضية",
-  "current-year": "السنة الحالية"
+  "current-year": "السنة الحالية",
+  "edit-delete":"تعديل / مسح"
 }

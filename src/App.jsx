@@ -1,8 +1,9 @@
-import { RouterProvider, Routes, createHashRouter } from "react-router-dom";
+import { RouterProvider,  createHashRouter } from "react-router-dom";
 import { TranslationProvider } from "./models/translation";
 import en from "./assets/locales/en.json";
 import ar from "./assets/locales/ar.json";
 import "./App.css";
+import routes from "./routes";
 
 function App() {
   return (
@@ -13,7 +14,7 @@ function App() {
       }}
       defaultLocale={"en"}
     >
-      <RouterProvider router={createHashRouter(Routes)} />
+      <RouterProvider router={createHashRouter(routes)} />
     </TranslationProvider>
   );
 }

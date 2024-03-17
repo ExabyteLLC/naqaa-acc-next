@@ -1,9 +1,9 @@
 
 import PaymentTypePage from "./pages/paymentType/paymentType.jsx";
-import TestPage from "./pages/testPage";
+import Serials from "./pages/serials/serials.jsx";
 
 const routes = [
-    { index: true, element: <TestPage /> },
+    { index: true, element: <Serials /> },
     { path:'payment-type', element: <PaymentTypePage /> }
 ];
 

@@ -11,30 +11,30 @@ const { Title, Text } = Typography;
 
 const PaymentTypePage = () => {
   const [dataStatus, setDataStatus] = useState(null);
-  const [paymentData, setpaymentData] = useState([]);
+  const [data, setData] = useState([]);
   const { t } = useTranslation();
 
   const fetchingData = () => {
     setDataStatus("loading");
     myFetch("/admin/accounting/payments/types/get", {
-      onLoad: (res, data) => {
+      onLoad: (res, api) => {
         if (!res.ok) {
           setDataStatus("error");
           return;
         }
-        if (data.statusText !== "OK") {
+        if (api.statusText !== "OK") {
           setDataStatus("error");
           return;
         }
         setDataStatus("fetched");
-        setpaymentData(data);
+        setData(api);
       },
     });
   };
 
   useEffect(() => {
     if (!dataStatus) fetchingData();
-  }, [dataStatus, paymentData]);
+  }, [dataStatus, data]);
 
   const columns = [
     {
@@ -91,7 +91,7 @@ const PaymentTypePage = () => {
 
       <DataTable
         columns={columns}
-        data={paymentData?.data}
+        data={data?.data}
         loading={dataStatus === "loading"}
       />
     </Content>

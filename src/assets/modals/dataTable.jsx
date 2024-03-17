@@ -134,6 +134,7 @@ const DataTable = ({
     render,
   }) => {
     key = key ?? title;
+    title = title ?? key;
 
     const sorter = (function () {
       if (actions) return null;

@@ -12,7 +12,7 @@ const PaymentTypeModal = ({ fetchFn }) => {
 
   const sendData = async (values) => {
     var fd = serialize(values);
-    setDataStatus("loading")
+    setDataStatus("loading");
     myFetch("/admin/accounting/payments/types/add", {
       body: fd,
       onLoad: (res, data) => {
@@ -25,6 +25,7 @@ const PaymentTypeModal = ({ fetchFn }) => {
           return;
         }
         setDataStatus("fetched");
+        fetchFn();
         setOpen(false);
       },
     });
@@ -42,14 +43,13 @@ const PaymentTypeModal = ({ fetchFn }) => {
       open={open}
       onOpen={() => setOpen(true)}
       onClose={() => setOpen(false)}
-      fetchFn={fetchFn}
       title={t("add-payment-type")}
       onFinish={onFinish}
       onFinishFailed={onFinishFailed}
       loading={dataStatus === "loading"}
     >
       <Form.Item
-        label="name"
+        label={t("name")}
         name="name"
         rules={[
           {
@@ -62,7 +62,19 @@ const PaymentTypeModal = ({ fetchFn }) => {
       </Form.Item>
 
       <Form.Item
-        label="status"
+        label={t("description")}
+        name="description"
+        rules={[
+          {
+            required: false,
+          },
+        ]}
+      >
+        <Input />
+      </Form.Item>
+
+      <Form.Item
+        label={t("status")}
         name="active"
         rules={[
           {

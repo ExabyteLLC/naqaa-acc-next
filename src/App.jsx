@@ -18,6 +18,9 @@ function App() {
           Table: {
             headerColor: "#fff",
             headerBg: "#008080",
+            headerSortHoverBg: "#008080",
+            headerSortActiveBg: "#005353"
+            
             // borderColor:'#008080'
           },
           Button: {

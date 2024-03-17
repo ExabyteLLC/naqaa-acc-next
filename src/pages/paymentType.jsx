@@ -5,7 +5,10 @@ import { useEffect, useRef, useState } from "react";
 import { DeleteFilled, EditFilled, SearchOutlined } from "@ant-design/icons";
 import PaymentTypeModal from "../assets/components/paymentTypeModal";
 import myFetch from "../models/fetch";
-const { Title } = Typography;
+import { FaSort } from "react-icons/fa";
+import { FaSortAmountDownAlt } from "react-icons/fa";
+import { FaSortAmountUpAlt } from "react-icons/fa";
+const { Title, Text } = Typography;
 
 const PaymentTypePage = () => {
   const [dataStatus, setDataStatus] = useState(null);
@@ -34,8 +37,8 @@ const PaymentTypePage = () => {
     if (!dataStatus) fetchingData();
   }, [dataStatus, paymentData]);
 
-  const [searchText, setSearchText] = useState("");
-  const [searchedColumn, setSearchedColumn] = useState("");
+  const setSearchText = useState("")[1];
+  const setSearchedColumn = useState("")[1];
   const searchInput = useRef(null);
   const handleSearch = (selectedKeys, confirm, dataIndex) => {
     confirm();
@@ -146,20 +149,73 @@ const PaymentTypePage = () => {
       };
   };
 
-  const col = ({ title, key, search = true, render }) => {
+  const col = ({
+    title,
+    key,
+    search = true,
+    render,
+    sorter
+  }) => {
     return {
       title: t(title),
       dataIndex: key ?? title,
       key: key ?? title,
       render: render ?? null,
+      sorter: sorter ?? null,
       ...getColumnSearchProps(key ?? title, search),
+      ...(!!sorter && {
+        sortDirections: ["ascend", "descend"],
+        sortIcon: ({ sortOrder }) => {
+          if (sortOrder === "ascend") {
+            return (
+              <FaSortAmountDownAlt
+                style={{
+                  color: "#fff",
+                  fontSize: 20,
+                }}
+              />
+            );
+          } else if (sortOrder === "descend") {
+            return (
+              <FaSortAmountUpAlt
+                style={{
+                  color: "#fff",
+                  fontSize: 20,
+                }}
+              />
+            );
+          } else {
+            return (
+              <FaSort 
+                style={{
+                  color: "#fff",
+                  fontSize: 20,
+                }}
+              />
+            );
+          }
+        },
+      }),
     };
   };
   const columns = [
-    { title: "id" },
+    {
+      title: "id",
+      // sorter: true,
+      sorter: (a, b) => a.id - b.id,
+    },
     { title: "name" },
     { title: "description" },
-    { title: "status", key: "active" },
+    {
+      title: "status",
+      key: "active",
+      render: (data) =>
+        data === 1 ? (
+          <Text type="success">Active</Text>
+        ) : (
+          <Text type="danger">Inactive</Text>
+        ),
+    },
     { title: "added-date", key: "addstamp" },
     { title: "last-modified", key: "updatestamp" },
     {
@@ -195,6 +251,11 @@ const PaymentTypePage = () => {
         loading={dataStatus === "loading"}
         rowKey="id"
         sticky
+        sortOrder="descend"
+        pagination={{
+          defaultPageSize: 20,
+          responsive: true,
+        }}
       />
     </Content>
   );

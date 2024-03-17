@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { EditFilled } from "@ant-design/icons";
 import { Flex } from "antd";
+import { API, UID } from "../../params";
 import myFetch from "../../models/fetch";
 import DataTable from "../../assets/modals/dataTable";
 import EditModal from "./components/EditModal";
@@ -11,16 +12,33 @@ const Serials = () => {
   const [data, setData] = useState([]);
 
   const fetchingData = () => {
-    setDataStatus("loading");
     myFetch("/admin/accounting/serials/get", {
-      onError: () => {
-        setDataStatus("error");
-      },
-      onSuccess: (api) => {
+      onLoad: (res, data) => {
+        if (!res.ok) {
+          setDataStatus("error");
+          return;
+        }
+        if (data.statusText !== "OK") {
+          setDataStatus("error");
+          return;
+        }
         setDataStatus("fetched");
-        setData(api.data);
+        setData(data);
       },
     });
+
+    const fetchData = async () => {
+      try {
+        const fetchApi = await fetch(
+          `${API}admin/accounting/serials/get?UID=${UID}`
+        );
+        const res = await fetchApi.json();
+        setData(res);
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      }
+    };
+    fetchData();
   };
 
   useEffect(() => {
@@ -85,7 +103,7 @@ const Serials = () => {
     <Content style={{ padding: "20px" }}>
       <DataTable
         columns={columns}
-        data={data}
+        data={data?.data ?? []}
         loading={dataStatus === "loading"}
       />
     </Content>

@@ -1,4 +1,4 @@
-import { Flex, Typography } from "antd";
+import { Button, Flex, Typography } from "antd";
 import useTranslation from "../../models/translation";
 import { Content } from "antd/es/layout/layout";
 import { useEffect, useState } from "react";
@@ -7,8 +7,6 @@ import PaymentTypeModal from "./components/paymentTypeModal";
 import myFetch from "../../models/fetch";
 import DataTable from "../../assets/modals/dataTable";
 import PaymentTypeEditModal from "./components/paymentTypeEditModal";
-import DeleteBtn from "./components/DeleteBtn";
-import { serialize } from "object-to-formdata";
 const { Title, Text } = Typography;
 
 const PaymentTypePage = () => {
@@ -16,25 +14,20 @@ const PaymentTypePage = () => {
   const [data, setData] = useState([]);
   const { t } = useTranslation();
 
-  const deleteFn = ({ id }) => {
-    var fd = serialize({ payment_type_id: id });
-    myFetch("/admin/accounting/payments/types/delete", {
-      body: fd,
-      onSuccess: () => {
-        setData((prev) => prev.filter((o) => o.id !== id));
-      },
-    });
-  };
-
   const fetchingData = () => {
     setDataStatus("loading");
     myFetch("/admin/accounting/payments/types/get", {
-      onError: () => {
-        setDataStatus("error");
-      },
-      onSuccess: (api) => {
+      onLoad: (res, api) => {
+        if (!res.ok) {
+          setDataStatus("error");
+          return;
+        }
+        if (api.statusText !== "OK") {
+          setDataStatus("error");
+          return;
+        }
         setDataStatus("fetched");
-        setData(api.data);
+        setData(api);
       },
     });
   };
@@ -75,15 +68,14 @@ const PaymentTypePage = () => {
               initialValues={key}
               fetchFn={fetchingData}
             />
-
-            <DeleteBtn
-              title={t("delete")}
-              okText={t("delete")}
-              cancelText={t("cancel")}
-              onConfirm={() => deleteFn(key)}
+            <Button
+              type="link"
+              onClick={() => {
+                console.log(key);
+              }}
             >
               <DeleteFilled />
-            </DeleteBtn>
+            </Button>
           </Flex>
         </>
       ),
@@ -99,7 +91,7 @@ const PaymentTypePage = () => {
 
       <DataTable
         columns={columns}
-        data={data}
+        data={data?.data}
         loading={dataStatus === "loading"}
       />
     </Content>

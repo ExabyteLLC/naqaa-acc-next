@@ -1,5 +1,5 @@
 import TestPage from "./pages/testPage";
 
-const routes = [{ index: true, element: <TestPage /> }];
+const routes = [{ index: true, element: <TestPage/> }];
 
 export default routes;

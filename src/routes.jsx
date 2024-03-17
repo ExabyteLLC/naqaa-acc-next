@@ -1,5 +1,5 @@
 
-import PaymentTypePage from "./pages/paymentType.jsx";
+import PaymentTypePage from "./pages/paymentType/paymentType.jsx";
 import TestPage from "./pages/testPage";
 
 const routes = [

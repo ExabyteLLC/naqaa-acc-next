@@ -1,9 +1,10 @@
 import { Form, Input, Select } from "antd";
-import useTranslation from "../../models/translation";
-import AppFormModal from "../modals/formModal";
+import useTranslation from "../../../models/translation";
+import AppFormModal from "../../../assets/modals/formModal";
 import { useState } from "react";
 import { serialize } from "object-to-formdata";
-import myFetch from "../../models/fetch";
+import myFetch from "../../../models/fetch";
+import TextArea from "antd/es/input/TextArea";
 
 const PaymentTypeModal = ({ fetchFn }) => {
   const { t } = useTranslation();
@@ -47,6 +48,7 @@ const PaymentTypeModal = ({ fetchFn }) => {
       onFinish={onFinish}
       onFinishFailed={onFinishFailed}
       loading={dataStatus === "loading"}
+      submitBtnTxt={t("add")}
     >
       <Form.Item
         label={t("name")}
@@ -70,7 +72,7 @@ const PaymentTypeModal = ({ fetchFn }) => {
           },
         ]}
       >
-        <Input />
+        <TextArea />
       </Form.Item>
 
       <Form.Item

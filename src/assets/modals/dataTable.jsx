@@ -1,41 +1,19 @@
-import { Button, Flex, Input, Space, Table, Typography } from "antd";
-import useTranslation from "../models/translation";
-import { Content } from "antd/es/layout/layout";
-import { useEffect, useRef, useState } from "react";
-import { DeleteFilled, EditFilled, SearchOutlined } from "@ant-design/icons";
-import PaymentTypeModal from "../assets/components/paymentTypeModal";
-import myFetch from "../models/fetch";
+import { Button, Input, Space, Table } from "antd";
+import { useRef, useState } from "react";
+import { SearchOutlined } from "@ant-design/icons";
 import { FaSort } from "react-icons/fa";
 import { FaSortAmountDownAlt } from "react-icons/fa";
 import { FaSortAmountUpAlt } from "react-icons/fa";
-const { Title, Text } = Typography;
+import useTranslation from "../../models/translation";
 
-const PaymentTypePage = () => {
-  const [dataStatus, setDataStatus] = useState(null);
-  const [paymentData, setpaymentData] = useState([]);
+const DataTable = ({
+  columns,
+  data,
+  rowKey = "id",
+  loading,
+  defaultPageSize = 20,
+} = {}) => {
   const { t } = useTranslation();
-
-  const fetchingData = () => {
-    setDataStatus("loading");
-    myFetch("/admin/accounting/payments/types/get", {
-      onLoad: (res, data) => {
-        if (!res.ok) {
-          setDataStatus("error");
-          return;
-        }
-        if (data.statusText !== "OK") {
-          setDataStatus("error");
-          return;
-        }
-        setDataStatus("fetched");
-        setpaymentData(data);
-      },
-    });
-  };
-
-  useEffect(() => {
-    if (!dataStatus) fetchingData();
-  }, [dataStatus, paymentData]);
 
   const setSearchText = useState("")[1];
   const setSearchedColumn = useState("")[1];
@@ -49,7 +27,6 @@ const PaymentTypePage = () => {
     clearFilters();
     setSearchText("");
   };
-
   // Search Configs
   const getColumnSearchProps = (dataIndex, search) => {
     if (search)
@@ -148,21 +125,61 @@ const PaymentTypePage = () => {
         },
       };
   };
-
   const col = ({
     title,
     key,
+    type = "string", // "int|num|float|string|date",
     search = true,
+    actions = false,
     render,
-    sorter
   }) => {
+    key = key ?? title;
+
+    const sorter = (function () {
+      if (actions) return null;
+      switch (type) {
+        case "int":
+        case "double":
+        case "decimal":
+        case "float":
+        case "num":
+          return (a, b) => new Number(a?.[key]) - new Number(b?.[key]);
+        case "string":
+          return (a, b) => a?.[key]?.toLowerCase() - b?.[key]?.toLowerCase();
+        case "date":
+          return (a, b) => new Date(a?.[key]) - new Date(b?.[key]);
+        default:
+          return null;
+      }
+    })();
+
+    const rendered = (function () {
+      if (render) return render;
+      switch (type) {
+        case "date":
+          return (v) => {
+            return new Date(v).toLocaleDateString("en-US", {
+              month: "short",
+              day: "numeric",
+              year: "numeric",
+
+              hour: "numeric",
+              minute: "numeric",
+              hour12: true,
+            });
+          };
+        default:
+          return null;
+      }
+    })();
+
     return {
       title: t(title),
-      dataIndex: key ?? title,
-      key: key ?? title,
-      render: render ?? null,
-      sorter: sorter ?? null,
-      ...getColumnSearchProps(key ?? title, search),
+      dataIndex: key,
+      key: key,
+      render: rendered,
+      sorter: sorter,
+      ...(!actions && getColumnSearchProps(key, search)),
       ...(!!sorter && {
         sortDirections: ["ascend", "descend"],
         sortIcon: ({ sortOrder }) => {
@@ -186,7 +203,7 @@ const PaymentTypePage = () => {
             );
           } else {
             return (
-              <FaSort 
+              <FaSort
                 style={{
                   color: "#fff",
                   fontSize: 20,
@@ -198,67 +215,22 @@ const PaymentTypePage = () => {
       }),
     };
   };
-  const columns = [
-    {
-      title: "id",
-      // sorter: true,
-      sorter: (a, b) => a.id - b.id,
-    },
-    { title: "name" },
-    { title: "description" },
-    {
-      title: "status",
-      key: "active",
-      render: (data) =>
-        data === 1 ? (
-          <Text type="success">Active</Text>
-        ) : (
-          <Text type="danger">Inactive</Text>
-        ),
-    },
-    { title: "added-date", key: "addstamp" },
-    { title: "last-modified", key: "updatestamp" },
-    {
-      title: "edit-delete",
-      search: false,
-      render: () => (
-        <>
-          <Flex align="center" justify="space-around">
-            <Button type="link">
-              <EditFilled />
-            </Button>
-            <Button type="link">
-              <DeleteFilled />
-            </Button>
-          </Flex>
-        </>
-      ),
-    },
-  ].map((column) => col(column));
-  const data = paymentData ? paymentData?.data : [];
-
+  const cols = columns.map((column) => col(column));
   return (
-    <Content style={{ padding: "20px" }}>
-      <Flex justify="space-between" align="center" style={{ width: "100%" }}>
-        <Title level={2}>{t("payment-type")}</Title>
-        <PaymentTypeModal fetchFn={fetchingData} />
-      </Flex>
-
-      <Table
-        bordered
-        columns={columns}
-        dataSource={data}
-        loading={dataStatus === "loading"}
-        rowKey="id"
-        sticky
-        sortOrder="descend"
-        pagination={{
-          defaultPageSize: 20,
-          responsive: true,
-        }}
-      />
-    </Content>
+    <Table
+      bordered
+      columns={cols}
+      dataSource={data ?? []}
+      loading={loading}
+      rowKey={rowKey}
+      sticky
+      sortOrder="descend"
+      pagination={{
+        defaultPageSize: defaultPageSize,
+        responsive: true,
+      }}
+    />
   );
 };
 
-export default PaymentTypePage;
+export default DataTable;

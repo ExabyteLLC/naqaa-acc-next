@@ -9,13 +9,19 @@ const AppFormModal = ({
   onFinish,
   onFinishFailed,
   children,
-  loading
+  loading,
+  btnType = "primary",
+  initialValues = {},
+  buttonIcon = null,
+  submitBtnTxt,
 }) => {
   const { t } = useTranslation();
+  const [form] = Form.useForm();
+
   return (
     <>
-      <Button type="primary" onClick={onOpen}>
-        {title}
+      <Button type={btnType} onClick={onOpen}>
+        {buttonIcon ?? title}
       </Button>
       <Modal
         title={title}
@@ -24,27 +30,35 @@ const AppFormModal = ({
         footer={[
           <Button
             key="submit"
-            htmlType="submit"
-            form={`form-${title}`}
             type="primary"
             loading={loading}
+            onClick={() => {
+              form
+                .validateFields()
+                .then(() => {
+                  form.submit();
+                })
+                .catch((info) => {
+                  console.log("Validate Failed:", info);
+                });
+            }}
           >
-            {t("add")}
+            {submitBtnTxt}
           </Button>,
-          <Button key="back" onClick={onClose} 
-          loading={loading}>
+          <Button key="back" onClick={onClose} disabled={loading}>
             {t("cancel")}
           </Button>,
         ]}
       >
         <Form
-          initialValues={{
-            remember: true,
+          initialValues={initialValues}
+          form={form}
+          onFinish={(values) => {
+            onFinish(values);
+            form.resetFields();
           }}
-          onFinish={onFinish}
           onFinishFailed={onFinishFailed}
           autoComplete="off"
-          id={`form-${title}`}
           layout="vertical"
         >
           {children}

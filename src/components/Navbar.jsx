@@ -1,36 +1,35 @@
-import { useState } from "react";
-import { MailOutlined } from "@ant-design/icons";
 import { Menu } from "antd";
-import { Outlet } from "react-router-dom";
+import { Outlet, useLocation, useNavigate } from "react-router-dom";
 
 const items = [
   {
     label: "Serial",
-    key: "mail",
-    icon: <MailOutlined />,
+    key: "/serial",
   },
   {
     label: "Payment Type",
-    key: "payment-type",
-    icon: <MailOutlined />,
+    key: "/payment-type",
   },
   {
     label: "Accounting Year",
-    key: "accounting-year",
-    icon: <MailOutlined />,
+    key: "/accounting-year",
+  },
+  {
+    label: "Chart of account",
+    key: "/chart-of-account",
   },
 ];
 const App = () => {
-  const [current, setCurrent] = useState("");
+  const navigate = useNavigate();
+  const { pathname } = useLocation();
   const onClick = (e) => {
-    console.log("click ", e);
-    setCurrent(e.key);
+    navigate(e.key);
   };
   return (
     <>
       <Menu
         onClick={onClick}
-        selectedKeys={[current]}
+        selectedKeys={[pathname]}
         mode="horizontal"
         items={items}
       />

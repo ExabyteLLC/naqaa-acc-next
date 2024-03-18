@@ -86,7 +86,7 @@ const Serials = () => {
     },
     {
       key: "edit",
-      actions: true,
+      search: false,
       render: (_, key) => (
         <>
           <Flex align="center" justify="space-around">

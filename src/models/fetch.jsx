@@ -31,5 +31,6 @@ const myFetch = async (
   if (onLoad) {
     onLoad(res, data);
   }
+  return { res, data };
 };
 export default myFetch;

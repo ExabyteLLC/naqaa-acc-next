@@ -47,6 +47,7 @@ const PaymentTypeEditModal = ({
 
   return (
     <AppFormModal
+      key={JSON.stringify(initialValues)}
       open={open}
       onOpen={() => setOpen(true)}
       onClose={() => setOpen(false)}

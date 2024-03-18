@@ -1,6 +1,6 @@
 import { QuestionCircleOutlined } from "@ant-design/icons";
 import { Button, Popconfirm } from "antd";
-const App = ({ title, okText, cancelText, onConfirm, children }) => (
+const DeleteBtn = ({ title, okText, cancelText, onConfirm, children }) => (
   <Popconfirm
     title={title}
     description="Are you sure!"
@@ -18,4 +18,4 @@ const App = ({ title, okText, cancelText, onConfirm, children }) => (
     <Button type="link">{children}</Button>
   </Popconfirm>
 );
-export default App;
+export default DeleteBtn;

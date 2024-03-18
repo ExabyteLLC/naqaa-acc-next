@@ -1,24 +1,24 @@
 import { Flex, Typography } from "antd";
-import useTranslation from "../../models/translation";
 import { Content } from "antd/es/layout/layout";
-import { useEffect, useState } from "react";
-import { DeleteFilled, EditFilled } from "@ant-design/icons";
-import PaymentTypeModal from "./components/paymentTypeModal";
-import myFetch from "../../models/fetch";
+import PaymentTypeModal from "../paymentType/components/paymentTypeModal";
 import DataTable from "../../assets/modals/dataTable";
-import PaymentTypeEditModal from "./components/paymentTypeEditModal";
-import DeleteBtn from "./components/DeleteBtn";
+import { useEffect, useState } from "react";
+import useTranslation from "../../models/translation";
+import myFetch from "../../models/fetch";
+import { DeleteFilled, EditFilled } from "@ant-design/icons";
+import DeleteBtn from "../paymentType/components/DeleteBtn";
+import PaymentTypeEditModal from "../paymentType/components/paymentTypeEditModal";
 import { serialize } from "object-to-formdata";
-const { Title } = Typography;
+const { Title, Text } = Typography;
 
-const PaymentTypePage = () => {
+export default function ChartOfAccount() {
   const [dataStatus, setDataStatus] = useState(null);
   const [data, setData] = useState([]);
   const { t } = useTranslation();
 
   const deleteFn = ({ id }) => {
     var fd = serialize({ payment_type_id: id });
-    myFetch("/admin/accounting/payments/types/delete", {
+    myFetch("/admin/accounting/accounts/delete", {
       body: fd,
       onSuccess: () => {
         setData((prev) => prev.filter((o) => o.id !== id));
@@ -28,7 +28,7 @@ const PaymentTypePage = () => {
 
   const fetchingData = () => {
     setDataStatus("loading");
-    myFetch("/admin/accounting/payments/types/get", {
+    myFetch("/admin/accounting/accounts/get", {
       onLoad: (res, api) => {
         if (!res.ok) {
           setDataStatus("error");
@@ -38,10 +38,38 @@ const PaymentTypePage = () => {
           setDataStatus("error");
           return;
         }
+        console.log(api.data);
+
+        console.log(listToTree(api.data));
+
         setDataStatus("fetched");
-        setData(api.data);
+        setData(listToTree(api.data));
       },
     });
+  };
+
+  const listToTree = (
+    arr,
+    currId = "id",
+    parentId = "parent_id",
+    childKey = "children",
+    cValue = null
+  ) => {
+    const treeList = [];
+    for (let item of arr) {
+      if (item[parentId] == cValue) {
+        let children = listToTree(
+          arr,
+          currId,
+          parentId,
+          childKey,
+          item[currId]
+        );
+        if (children.length > 0) item[childKey] = children;
+        treeList.push(item);
+      }
+    }
+    return treeList;
   };
 
   useEffect(() => {
@@ -59,6 +87,12 @@ const PaymentTypePage = () => {
       title: "status",
       key: "active",
       type: "int",
+      render: (data) =>
+        data === 1 ? (
+          <Text type="success">Active</Text>
+        ) : (
+          <Text type="danger">Inactive</Text>
+        ),
       options: [
         {
           label: "Active",
@@ -77,28 +111,26 @@ const PaymentTypePage = () => {
     {
       title: "edit-delete",
       search: false,
-      render: (_, key) => {
-        return (
-          <>
-            <Flex align="center" justify="space-around">
-              <PaymentTypeEditModal
-                butonType="link"
-                buttonIcon={<EditFilled />}
-                initialValues={key}
-                fetchFn={fetchingData}
-              />
-              <DeleteBtn
-                title={t("delete")}
-                okText={t("delete")}
-                cancelText={t("cancel")}
-                onConfirm={() => deleteFn(key)}
-              >
-                <DeleteFilled />
-              </DeleteBtn>
-            </Flex>
-          </>
-        );
-      },
+      render: (_, key) => (
+        <>
+          <Flex align="center" justify="space-around">
+            <PaymentTypeEditModal
+              butonType="link"
+              buttonIcon={<EditFilled />}
+              initialValues={key}
+              fetchFn={fetchingData}
+            />
+            <DeleteBtn
+              title={t("delete")}
+              okText={t("delete")}
+              cancelText={t("cancel")}
+              onConfirm={() => deleteFn(key)}
+            >
+              <DeleteFilled />
+            </DeleteBtn>
+          </Flex>
+        </>
+      ),
     },
   ];
 
@@ -121,6 +153,4 @@ const PaymentTypePage = () => {
       />
     </Content>
   );
-};
-
-export default PaymentTypePage;
+}

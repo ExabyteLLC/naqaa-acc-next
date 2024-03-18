@@ -1,4 +1,4 @@
-import { Button, Flex, Typography } from "antd";
+import {  Flex, Typography } from "antd";
 import useTranslation from "../../models/translation";
 import { Content } from "antd/es/layout/layout";
 import { useEffect, useState } from "react";
@@ -7,12 +7,25 @@ import PaymentTypeModal from "./components/paymentTypeModal";
 import myFetch from "../../models/fetch";
 import DataTable from "../../assets/modals/dataTable";
 import PaymentTypeEditModal from "./components/paymentTypeEditModal";
+import DeleteBtn from "./components/DeleteBtn";
+import { serialize } from "object-to-formdata";
 const { Title, Text } = Typography;
 
 const PaymentTypePage = () => {
   const [dataStatus, setDataStatus] = useState(null);
   const [data, setData] = useState([]);
   const { t } = useTranslation();
+
+  const deleteFn = ({ id }) => {
+    var fd = serialize({ payment_type_id: id });
+    myFetch("/admin/accounting/payments/types/delete", {
+      body: fd,
+      onSuccess: () => {
+        setData((prev) => prev.filter((o) => o.id !== id));
+      },
+    });
+  };
+
 
   const fetchingData = () => {
     setDataStatus("loading");
@@ -27,7 +40,7 @@ const PaymentTypePage = () => {
           return;
         }
         setDataStatus("fetched");
-        setData(api);
+        setData(api.data);
       },
     });
   };
@@ -68,14 +81,14 @@ const PaymentTypePage = () => {
               initialValues={key}
               fetchFn={fetchingData}
             />
-            <Button
-              type="link"
-              onClick={() => {
-                console.log(key);
-              }}
+            <DeleteBtn
+              title={t("delete")}
+              okText={t("delete")}
+              cancelText={t("cancel")}
+              onConfirm={() => deleteFn(key)}
             >
               <DeleteFilled />
-            </Button>
+            </DeleteBtn>
           </Flex>
         </>
       ),
@@ -91,8 +104,13 @@ const PaymentTypePage = () => {
 
       <DataTable
         columns={columns}
-        data={data?.data}
+        data={data}
         loading={dataStatus === "loading"}
+        emptyText={
+          dataStatus === "error"
+            ? "Sorry something went worng. Please, try again later."
+            : "No payment types found yet."
+        }
       />
     </Content>
   );

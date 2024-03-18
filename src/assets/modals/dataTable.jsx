@@ -12,6 +12,7 @@ const DataTable = ({
   rowKey = "id",
   loading,
   defaultPageSize = 20,
+  emptyText = "",
 } = {}) => {
   const { t } = useTranslation();
 
@@ -230,6 +231,7 @@ const DataTable = ({
         defaultPageSize: defaultPageSize,
         responsive: true,
       }}
+      locale={{ emptyText }}
     />
   );
 };

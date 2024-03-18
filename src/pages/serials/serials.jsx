@@ -28,13 +28,16 @@ const Serials = () => {
     });
 
     const fetchData = async () => {
+      setDataStatus("loading");
       try {
         const fetchApi = await fetch(
           `${API}admin/accounting/serials/get?UID=${UID}`
         );
         const res = await fetchApi.json();
+        setDataStatus("fetched");
         setData(res);
       } catch (error) {
+        setDataStatus("error");
         console.error("Error fetching data:", error);
       }
     };
@@ -105,6 +108,11 @@ const Serials = () => {
         columns={columns}
         data={data?.data ?? []}
         loading={dataStatus === "loading"}
+        emptyText={
+          dataStatus === "error"
+            ? "Sorry something went worng. Please, try again later."
+            : "No serials found yet."
+        }
       />
     </Content>
   );

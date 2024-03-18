@@ -50,7 +50,7 @@ const PaymentTypeEditModal = ({
       open={open}
       onOpen={() => setOpen(true)}
       onClose={() => setOpen(false)}
-      title={t("add-payment-type")}
+      title={t("edit")}
       onFinish={onFinish}
       onFinishFailed={onFinishFailed}
       initialValues={initialValues}

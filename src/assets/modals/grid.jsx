@@ -1,11 +1,13 @@
 import { Col, Row } from "antd";
 
 const MyGrid = ({ children, defaultSpan = 12, spacingX = 8, spacingY = 8 }) => {
-  return (
+ return (
     <Row gutter={[spacingX, spacingY]}>
       {children.map((child, index) => {
         const span = (function () {
-          if (child.props.fullSpan) {
+          if (child.props.spanless) {
+            return null;
+          } else if (child.props.fullspan) {
             return 24;
           } else if (child.props.span) {
             return child.props.span;
@@ -13,11 +15,15 @@ const MyGrid = ({ children, defaultSpan = 12, spacingX = 8, spacingY = 8 }) => {
             return defaultSpan;
           }
         })();
-        return (
-          <Col key={index} span={span}>
-            {child}
-          </Col>
-        );
+        if (span) {
+          return (
+            <Col key={index} span={span}>
+              {child}
+            </Col>
+          );
+        } else {
+          return child;
+        }
       })}
     </Row>
   );

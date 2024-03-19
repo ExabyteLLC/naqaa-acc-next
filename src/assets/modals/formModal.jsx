@@ -1,4 +1,4 @@
-import { Button, Form, Modal } from "antd";
+import { Button, Form, Modal, Typography } from "antd";
 import useTranslation from "../../models/translation";
 
 const AppFormModal = ({
@@ -14,10 +14,25 @@ const AppFormModal = ({
   initialValues = {},
   buttonIcon = null,
   submitBtnTxt,
-  width = "80%"
+  width = "80%",
 }) => {
   const { t } = useTranslation();
   const [form] = Form.useForm();
+
+  const customizeRequiredMark = (label, { required }) => (
+    <p>
+      <Typography.Text>{label}</Typography.Text>{" "}
+      {required ? (
+        <Typography.Text strong type="danger">
+          *
+        </Typography.Text>
+      ) : (
+        <Typography.Text italic type="secondary">
+          (optional)
+        </Typography.Text>
+      )}
+    </p>
+  );
 
   return (
     <>
@@ -54,6 +69,7 @@ const AppFormModal = ({
       >
         <Form
           initialValues={initialValues}
+          requiredMark={customizeRequiredMark}
           form={form}
           onFinish={(values) => {
             onFinish(values);

@@ -187,14 +187,16 @@ export default function ChartOfAccount() {
               initialValues={key}
               fetchFn={fetchingData}
             />
-            <DeleteBtn
-              title={t("delete")}
-              okText={t("delete")}
-              cancelText={t("cancel")}
-              onConfirm={() => deleteFn(key)}
-            >
-              <DeleteFilled />
-            </DeleteBtn>
+            {!key.children && (
+              <DeleteBtn
+                title={t("delete")}
+                okText={t("delete")}
+                cancelText={t("cancel")}
+                onConfirm={() => deleteFn(key)}
+              >
+                <DeleteFilled />
+              </DeleteBtn>
+            )}
           </>
         )}
       />

@@ -1128,5 +1128,12 @@
   "assets-types": "assets types",
   "last-year": "last year",
   "current-year": "current year",
-  "edit-delete":"Edit / Delete"
+  "edit-delete": "Edit / Delete",
+  "liabilities": "liabilities",
+  "equity": "Owner's equity",
+  "master-1": "Main",
+  "master-0": "Sub",
+  "report_balance_sheet-1": "In balance sheet",
+  "revenue": "Revenue",
+  "expenses": "Expenses"
 }

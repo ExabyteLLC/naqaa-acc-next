@@ -1,5 +1,6 @@
-import { Menu } from "antd";
+import { Button, Menu } from "antd";
 import { Outlet, useLocation, useNavigate } from "react-router-dom";
+import useTranslation from "../models/translation";
 
 const items = [
   {
@@ -22,6 +23,9 @@ const items = [
 const App = () => {
   const navigate = useNavigate();
   const { pathname } = useLocation();
+
+  const { locale, changeLocale } = useTranslation();
+
   const onClick = (e) => {
     navigate(e.key);
   };
@@ -33,6 +37,13 @@ const App = () => {
         mode="horizontal"
         items={items}
       />
+      <Button
+        onClick={() => {
+          changeLocale(locale === "en" ? "ar" : "en");
+        }}
+      >
+        {locale === "en" ? "ar" : "en"}
+      </Button>
       <Outlet />
     </>
   );

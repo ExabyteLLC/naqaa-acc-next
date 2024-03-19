@@ -1,4 +1,4 @@
-import { Button, Input, Select, Space, Table, Typography } from "antd";
+import { Button, Flex, Input, Select, Space, Table, Typography } from "antd";
 import { SearchOutlined } from "@ant-design/icons";
 import { FaSort } from "react-icons/fa";
 import { FaSortAmountDownAlt } from "react-icons/fa";
@@ -15,11 +15,29 @@ const DataTable = ({
   dataTree = false,
   treeCurrId = "id",
   treeParentId = "parent_id",
+  actions = null,
+  scroll = { x: "max-content" },
 } = {}) => {
   const { t } = useTranslation();
 
   // cols
   const cols = columns.map((column) => col(t, column));
+  if (actions) {
+    cols.push({
+      key: "actions",
+      fixed:  "right",
+      onCell: () => {
+        return {
+          style: { padding: 0 },
+        };
+      },
+      render: (_, key) => (
+        <Flex align="center" justify="space-around">
+          {actions(_, key)}
+        </Flex>
+      ),
+    });
+  }
   // data
   const dataSource = (function () {
     if (dataTree) {
@@ -43,6 +61,7 @@ const DataTable = ({
         responsive: true,
       }}
       locale={{ emptyText }}
+      scroll={scroll}
     />
   );
 };
@@ -58,11 +77,11 @@ function col(
     search = true,
     render,
     options,
+    width = "max-content",
   }
 ) {
   key = key ?? title;
   title = title ?? key;
-
   const sorter = (function () {
     if (!search) return null;
     switch (type) {
@@ -73,7 +92,13 @@ function col(
       case "num":
         return (a, b) => new Number(a?.[key]) - new Number(b?.[key]);
       case "string":
-        return (a, b) => a?.[key]?.toLowerCase() - b?.[key]?.toLowerCase();
+        return (a, b) => {
+          a = (a?.[key] ?? "")?.toString().toLowerCase();
+          b = (b?.[key] ?? "")?.toString().toLowerCase();
+          if (a < b) return -1;
+          if (a > b) return 1;
+          return 0;
+        };
       case "date":
         return (a, b) => new Date(a?.[key]) - new Date(b?.[key]);
       default:
@@ -85,9 +110,11 @@ function col(
     if (render) return render;
     if (options) {
       const r = (v) => {
-        var opt = options.find((o) => o.value === v);
+        var opt = options.find((o) => o?.value === v);
         return (
-          <Typography.Text {...(opt?.props ?? {})}>{opt.label}</Typography.Text>
+          <Typography.Text {...(opt?.props ?? {})}>
+            {opt?.label}
+          </Typography.Text>
         );
       };
       return r;
@@ -114,8 +141,14 @@ function col(
     title: t(title),
     dataIndex: key,
     key: key,
+    width,
     render: rendered,
     sorter: sorter,
+    onCell: () => {
+      return {
+        style: { minWidth: 100 },
+      };
+    },
     ...getColumnSearchProps(key, search, type, options),
     ...(!!sorter && {
       sortDirections: ["ascend", "descend"],
@@ -184,8 +217,8 @@ function getColumnSearchProps(dataIndex, search, type, options) {
                   }}
                 >
                   {options.map((option) => (
-                    <Select.Option key={option.value} value={option.value}>
-                      {option.label}
+                    <Select.Option key={option?.value} value={option?.value}>
+                      {option?.label}
                     </Select.Option>
                   ))}
                 </Select>
@@ -263,9 +296,7 @@ function getColumnSearchProps(dataIndex, search, type, options) {
               onClick={() => {
                 if (clearFilters) {
                   clearFilters();
-                  confirm({
-                    closeDropdown: false,
-                  });
+                  confirm();
                 }
               }}
               size="small"

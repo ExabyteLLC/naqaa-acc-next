@@ -12,6 +12,9 @@ const cookies = new Cookies(null, { path: "/" });
 const Translation = createContext(null);
 export const TranslationProvider = ({ locales, defaultLocale, children }) => {
   const [locale, setLocale] = useState(cookies.get("locale") ?? defaultLocale);
+  const [dir, setDir] = useState(
+    locales[cookies.get("locale") ?? defaultLocale].dir ?? "ltr"
+  );
 
   const t = useCallback(
     (key) => {
@@ -23,6 +26,7 @@ export const TranslationProvider = ({ locales, defaultLocale, children }) => {
   const changeLocale = useCallback(
     (l) => {
       setLocale(l);
+      setDir(locales[l].dir ?? "ltr");
       document.documentElement.lang = l;
       document.documentElement.dir = locales?.[l]?.dir;
       cookies.set("locale", l);
@@ -36,7 +40,7 @@ export const TranslationProvider = ({ locales, defaultLocale, children }) => {
 
   return (
     <Translation.Provider
-      value={{ t, locale, locales: Object.keys(locales), changeLocale }}
+      value={{ t, locale, dir, locales: Object.keys(locales), changeLocale }}
     >
       {children}
     </Translation.Provider>

@@ -118,6 +118,7 @@ const PaymentTypePage = () => {
             ? "Sorry something went worng. Please, try again later."
             : "No payment types found yet."
         }
+        scroll={false}
       />
     </Content>
   );

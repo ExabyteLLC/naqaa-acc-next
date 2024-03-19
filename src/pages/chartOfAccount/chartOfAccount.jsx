@@ -1,15 +1,15 @@
 import { Flex, Typography } from "antd";
 import { Content } from "antd/es/layout/layout";
-import PaymentTypeModal from "../paymentType/components/paymentTypeModal";
 import DataTable from "../../assets/modals/dataTable";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import useTranslation from "../../models/translation";
 import myFetch from "../../models/fetch";
 import { DeleteFilled, EditFilled } from "@ant-design/icons";
 import DeleteBtn from "../paymentType/components/DeleteBtn";
 import PaymentTypeEditModal from "../paymentType/components/paymentTypeEditModal";
 import { serialize } from "object-to-formdata";
-const { Title, Text } = Typography;
+import AddForm from "./components/addForm";
+const { Title } = Typography;
 
 export default function ChartOfAccount() {
   const [dataStatus, setDataStatus] = useState(null);
@@ -25,8 +25,34 @@ export default function ChartOfAccount() {
       },
     });
   };
+  const listToTree = useCallback(
+    (
+      arr,
+      currId = "id",
+      parentId = "parent_id",
+      childKey = "children",
+      cValue = null
+    ) => {
+      const treeList = [];
+      for (let item of arr) {
+        if (item[parentId] == cValue) {
+          let children = listToTree(
+            arr,
+            currId,
+            parentId,
+            childKey,
+            item[currId]
+          );
+          if (children.length > 0) item[childKey] = children;
+          treeList.push(item);
+        }
+      }
+      return treeList;
+    },
+    []
+  );
 
-  const fetchingData = () => {
+  const fetchingData = useCallback(() => {
     setDataStatus("loading");
     myFetch("/admin/accounting/accounts/get", {
       onLoad: (res, api) => {
@@ -38,82 +64,123 @@ export default function ChartOfAccount() {
           setDataStatus("error");
           return;
         }
-        console.log(api.data);
-
         console.log(listToTree(api.data));
 
         setDataStatus("fetched");
         setData(listToTree(api.data));
       },
     });
-  };
-
-  const listToTree = (
-    arr,
-    currId = "id",
-    parentId = "parent_id",
-    childKey = "children",
-    cValue = null
-  ) => {
-    const treeList = [];
-    for (let item of arr) {
-      if (item[parentId] == cValue) {
-        let children = listToTree(
-          arr,
-          currId,
-          parentId,
-          childKey,
-          item[currId]
-        );
-        if (children.length > 0) item[childKey] = children;
-        treeList.push(item);
-      }
-    }
-    return treeList;
-  };
+  }, [listToTree]);
 
   useEffect(() => {
     if (!dataStatus) fetchingData();
-  }, [dataStatus, data]);
+  }, [dataStatus, data, fetchingData]);
 
   const columns = [
     {
       title: "id",
       type: "int",
     },
-    { title: "name" },
-    { title: "description" },
+    { title: "name", width: 150 },
+    {
+      title: "account-nature",
+      key: "nature",
+      width: 200,
+      options: [
+        {
+          label: t("credit"),
+          value: "creditor",
+        },
+        {
+          label: t("debit"),
+          value: "debitor",
+        },
+      ],
+    },
+    {
+      title: "account-route",
+      key: "route",
+      width: 200,
+      options: [
+        {
+          label: t("assets"),
+          value: "assets",
+        },
+        {
+          label: t("liabilities"),
+          value: "liabilities",
+        },
+        {
+          label: t("equity"),
+          value: "equity",
+        },
+        {
+          label: t("revenue"),
+          value: "revenue",
+        },
+        {
+          label: t("expenses"),
+          value: "expenses",
+        },
+      ],
+    },
+    {
+      title: "account-type",
+      key: "master",
+      type: "int",
+      options: [
+        {
+          label: t("master-1"),
+          value: 1,
+        },
+        {
+          label: t("master-0"),
+          value: 0,
+        },
+      ],
+      width: 200,
+    },
+    { title: "description", width: 300 },
     {
       title: "status",
       key: "active",
       type: "int",
-      render: (data) =>
-        data === 1 ? (
-          <Text type="success">Active</Text>
-        ) : (
-          <Text type="danger">Inactive</Text>
-        ),
       options: [
         {
-          label: "Active",
+          label: t("active"),
           value: 1,
           props: { type: "success" },
         },
         {
-          label: "Inactive",
+          label: t("in-active"),
           value: 0,
           props: { type: "danger" },
         },
       ],
+      width: 200,
     },
-    { title: "added-date", key: "addstamp", type: "date" },
-    { title: "last-modified", key: "updatestamp", type: "date" },
-    {
-      title: "edit-delete",
-      search: false,
-      render: (_, key) => (
-        <>
-          <Flex align="center" justify="space-around">
+    { title: "added-date", key: "addstamp", type: "date", width: 300 },
+    { title: "last-modified", key: "updatestamp", type: "date", width: 300 },
+  ];
+
+  return (
+    <Content style={{ padding: "20px" }}>
+      <Flex justify="space-between" align="center" style={{ width: "100%" }}>
+        <Title level={2}>{t("payment-type")}</Title>
+        <AddForm fetchFn={fetchingData} />
+      </Flex>
+
+      <DataTable
+        columns={columns}
+        data={data}
+        loading={dataStatus === "loading"}
+        emptyText={
+          dataStatus === "error"
+            ? "Sorry something went worng. Please, try again later."
+            : "No payment types found yet."
+        }
+        actions={(_, key) => (
+          <>
             <PaymentTypeEditModal
               butonType="link"
               buttonIcon={<EditFilled />}
@@ -128,28 +195,8 @@ export default function ChartOfAccount() {
             >
               <DeleteFilled />
             </DeleteBtn>
-          </Flex>
-        </>
-      ),
-    },
-  ];
-
-  return (
-    <Content style={{ padding: "20px" }}>
-      <Flex justify="space-between" align="center" style={{ width: "100%" }}>
-        <Title level={2}>{t("payment-type")}</Title>
-        <PaymentTypeModal fetchFn={fetchingData} />
-      </Flex>
-
-      <DataTable
-        columns={columns}
-        data={data}
-        loading={dataStatus === "loading"}
-        emptyText={
-          dataStatus === "error"
-            ? "Sorry something went worng. Please, try again later."
-            : "No payment types found yet."
-        }
+          </>
+        )}
       />
     </Content>
   );

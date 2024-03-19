@@ -46,6 +46,9 @@ function App2() {
             colorLinkHover: "#005353",
             colorBorder: "#008080",
           },
+          Form: {
+            itemMarginBottom: 0,
+          },
         },
       }}
     >

@@ -20,7 +20,7 @@ const AppFormModal = ({
   const [form] = Form.useForm();
 
   const customizeRequiredMark = (label, { required }) => (
-    <p>
+    <p style={{marginTop:0, marginBottom:0}}>
       <Typography.Text>{label}</Typography.Text>{" "}
       {required ? (
         <Typography.Text strong type="danger">
@@ -66,6 +66,7 @@ const AppFormModal = ({
           </Button>,
         ]}
         width={width}
+        centered
       >
         <Form
           initialValues={initialValues}
@@ -78,6 +79,7 @@ const AppFormModal = ({
           onFinishFailed={onFinishFailed}
           autoComplete="off"
           layout="vertical"
+          
         >
           {children}
         </Form>

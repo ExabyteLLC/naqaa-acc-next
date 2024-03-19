@@ -829,8 +829,8 @@
   "add-new-year": "Add new year",
   "update-year": "Update year",
   "add-journal-transaction": "Add journal transaction",
-  "credit-key": "Credit",
-  "debit-key": "Debit",
+  "credit-key": "Creditor",
+  "debit-key": "Debitor",
   "naqaa-admin": "Admin",
   "time-interval": "Time interval",
   "address-city": "Address city",
@@ -1135,5 +1135,6 @@
   "master-0": "Sub",
   "report_balance_sheet-1": "In balance sheet",
   "revenue": "Revenue",
-  "expenses": "Expenses"
+  "expenses": "Expenses",
+  "optional": "optional"
 }

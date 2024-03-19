@@ -1,5 +1,6 @@
 import { Divider, Form, Select } from "antd";
 import MyGrid from "../../../../assets/modals/grid";
+import SelectOptionGenerator from "./selectOptionGenerator";
 
 export default function AdditionalInfoSection({ t }) {
   return (
@@ -10,20 +11,18 @@ export default function AdditionalInfoSection({ t }) {
 
       <Form.Item
         label={t("cost-center")}
-        name="nature"
+        name="reference_branch_id"
         rules={[
           {
             required: false,
           },
         ]}
       >
-        <Select placeholder={t("choose")}>
-          <Select.Option>text</Select.Option>
-        </Select>
+        <Select placeholder={t("choose")}></Select>
       </Form.Item>
       <Form.Item
         label={t("status")}
-        name="nature"
+        name="active"
         rules={[
           {
             required: true,
@@ -32,7 +31,10 @@ export default function AdditionalInfoSection({ t }) {
         ]}
       >
         <Select placeholder={t("choose")}>
-          <Select.Option>text</Select.Option>
+          {SelectOptionGenerator([
+            { title: "active", key: 1 },
+            { title: "in-active", key: 0 },
+          ])}
         </Select>
       </Form.Item>
     </MyGrid>

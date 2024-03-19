@@ -9,9 +9,12 @@ import DescriptionSection from "./formComponents/descriptionSection";
 import AccountSettingSection from "./formComponents/accountSettingSection";
 import AccountReportsSection from "./formComponents/accountReportsSection";
 import AdditionalInfoSection from "./formComponents/additionalInfoSection";
+import useCoaModel from "../model";
 
-const AddForm = ({ fetchFn }) => {
+const AddForm = () => {
   const { t } = useTranslation();
+  const { fetchingData: fetchFn } = useCoaModel();
+
   const [dataStatus, setDataStatus] = useState(null);
   const [open, setOpen] = useState(false);
 
@@ -54,7 +57,7 @@ const AddForm = ({ fetchFn }) => {
       loading={dataStatus === "loading"}
       submitBtnTxt={t("add")}
     >
-      <MyGrid spacingY={24}>
+      <MyGrid spacingY={12}>
         <CodeSection t={t} fullspan="true" />
         <DescriptionSection t={t} fullspan="true" />
         <AccountSettingSection t={t} fullspan="true" />

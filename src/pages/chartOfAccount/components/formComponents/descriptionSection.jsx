@@ -50,7 +50,7 @@ export default function DescriptionSection({ t }) {
       </Form.Item>
       <Form.Item
         label={t("description") + " " + t("ar")}
-        name="description"
+        name="description_alt"
         rules={[
           {
             required: false,

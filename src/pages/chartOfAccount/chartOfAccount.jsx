@@ -1,80 +1,25 @@
 import { Flex, Typography } from "antd";
 import { Content } from "antd/es/layout/layout";
 import DataTable from "../../assets/modals/dataTable";
-import { useCallback, useEffect, useState } from "react";
 import useTranslation from "../../models/translation";
-import myFetch from "../../models/fetch";
 import { DeleteFilled, EditFilled } from "@ant-design/icons";
 import DeleteBtn from "../paymentType/components/DeleteBtn";
 import PaymentTypeEditModal from "../paymentType/components/paymentTypeEditModal";
-import { serialize } from "object-to-formdata";
 import AddForm from "./components/addForm";
+import useCoaModel, { CoaModel } from "./model";
 const { Title } = Typography;
 
 export default function ChartOfAccount() {
-  const [dataStatus, setDataStatus] = useState(null);
-  const [data, setData] = useState([]);
-  const { t } = useTranslation();
-
-  const deleteFn = ({ id }) => {
-    var fd = serialize({ payment_type_id: id });
-    myFetch("/admin/accounting/accounts/delete", {
-      body: fd,
-      onSuccess: () => {
-        setData((prev) => prev.filter((o) => o.id !== id));
-      },
-    });
-  };
-  const listToTree = useCallback(
-    (
-      arr,
-      currId = "id",
-      parentId = "parent_id",
-      childKey = "children",
-      cValue = null
-    ) => {
-      const treeList = [];
-      for (let item of arr) {
-        if (item[parentId] == cValue) {
-          let children = listToTree(
-            arr,
-            currId,
-            parentId,
-            childKey,
-            item[currId]
-          );
-          if (children.length > 0) item[childKey] = children;
-          treeList.push(item);
-        }
-      }
-      return treeList;
-    },
-    []
+  return (
+    <CoaModel.Provider>
+      <Page />
+    </CoaModel.Provider>
   );
+}
 
-  const fetchingData = useCallback(() => {
-    setDataStatus("loading");
-    myFetch("/admin/accounting/accounts/get", {
-      onLoad: (res, api) => {
-        if (!res.ok) {
-          setDataStatus("error");
-          return;
-        }
-        if (api.statusText !== "OK") {
-          setDataStatus("error");
-          return;
-        }
-        console.log(listToTree(api.data));
-
-        setDataStatus("fetched");
-        setData(listToTree(api.data));
-      },
-    });
-  }, [listToTree]);
-
-  useEffect(() => {
-    if (!dataStatus) fetchingData();
-  }, [dataStatus, data, fetchingData]);
+function Page() {
+  const { data, dataStatus, deleteFn, fetchingData } = useCoaModel();
+  const { t } = useTranslation();
 
   const columns = [
     {
@@ -82,17 +27,18 @@ export default function ChartOfAccount() {
       type: "int",
     },
     { title: "name", width: 150 },
+    { title:'name-in-arabic',key: "name_alt", width: 150 },
     {
       title: "account-nature",
       key: "nature",
       width: 200,
       options: [
         {
-          label: t("credit"),
+          label: t("credit-key"),
           value: "creditor",
         },
         {
-          label: t("debit"),
+          label: t("debit-key"),
           value: "debitor",
         },
       ],
@@ -141,6 +87,7 @@ export default function ChartOfAccount() {
       width: 200,
     },
     { title: "description", width: 300 },
+    { title:'description-in-arabic',key: "description_alt", width: 300 },
     {
       title: "status",
       key: "active",
@@ -167,7 +114,7 @@ export default function ChartOfAccount() {
     <Content style={{ padding: "20px" }}>
       <Flex justify="space-between" align="center" style={{ width: "100%" }}>
         <Title level={2}>{t("payment-type")}</Title>
-        <AddForm fetchFn={fetchingData} />
+        <AddForm fetchFn={fetchingData} data={data} />
       </Flex>
 
       <DataTable

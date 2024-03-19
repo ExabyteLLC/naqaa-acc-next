@@ -1,5 +1,6 @@
 import { Divider, Form, Select } from "antd";
 import MyGrid from "../../../../assets/modals/grid";
+import SelectOptionGenerator from "./selectOptionGenerator";
 
 export default function AccountReportsSection({ t }) {
   return (
@@ -10,7 +11,7 @@ export default function AccountReportsSection({ t }) {
 
       <Form.Item
         label={t("balance-sheet")}
-        name="nature"
+        name="report_balance_sheet"
         rules={[
           {
             required: false,
@@ -18,12 +19,12 @@ export default function AccountReportsSection({ t }) {
         ]}
       >
         <Select placeholder={t("choose")}>
-          <Select.Option>text</Select.Option>
+          {SelectOptionGenerator([{ title: "balance-sheet", key: 1 }])}
         </Select>
       </Form.Item>
       <Form.Item
         label={t("report-income-statement")}
-        name="nature"
+        name="report_income_statement"
         rules={[
           {
             required: false,
@@ -31,12 +32,12 @@ export default function AccountReportsSection({ t }) {
         ]}
       >
         <Select placeholder={t("choose")}>
-          <Select.Option>text</Select.Option>
+          {SelectOptionGenerator(["revenue", "expenses"])}
         </Select>
       </Form.Item>
       <Form.Item
         label={t("report-cash-flow")}
-        name="nature"
+        name="report_cash_flow"
         rules={[
           {
             required: false,
@@ -44,7 +45,7 @@ export default function AccountReportsSection({ t }) {
         ]}
       >
         <Select placeholder={t("choose")}>
-          <Select.Option>text</Select.Option>
+          {SelectOptionGenerator([1, 2, 3])}
         </Select>
       </Form.Item>
     </MyGrid>

@@ -1135,5 +1135,6 @@
   "master-0": "فرعي",
   "report_balance_sheet-1": "في الميزانية",
   "revenue": "الإيرادات",
-  "expenses": "المصروفات"
+  "expenses": "المصروفات",
+  "optional": "خياري"
 }

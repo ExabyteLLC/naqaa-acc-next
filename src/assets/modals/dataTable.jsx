@@ -25,7 +25,7 @@ const DataTable = ({
   if (actions) {
     cols.push({
       key: "actions",
-      fixed:  "right",
+      fixed: "right",
       onCell: () => {
         return {
           style: { padding: 0 },

@@ -20,7 +20,7 @@ const AppFormModal = ({
   const [form] = Form.useForm();
 
   const customizeRequiredMark = (label, { required }) => (
-    <p style={{marginTop:0, marginBottom:0}}>
+    <p style={{ marginTop: 0, marginBottom: 0 }}>
       <Typography.Text>{label}</Typography.Text>{" "}
       {required ? (
         <Typography.Text strong type="danger">
@@ -28,7 +28,7 @@ const AppFormModal = ({
         </Typography.Text>
       ) : (
         <Typography.Text italic type="secondary">
-          (optional)
+          ({t("optional")})
         </Typography.Text>
       )}
     </p>
@@ -36,7 +36,7 @@ const AppFormModal = ({
 
   return (
     <>
-      <Button type={btnType} onClick={onOpen}>
+      <Button disabled={loading ?? false} type={btnType} onClick={onOpen}>
         {buttonIcon ?? title}
       </Button>
       <Modal
@@ -58,15 +58,24 @@ const AppFormModal = ({
                   console.log("Validate Failed:", info);
                 });
             }}
+            style={{ width: "20%", margin: "15px 0" }}
           >
             {submitBtnTxt}
           </Button>,
-          <Button key="back" onClick={onClose} disabled={loading}>
+          <Button
+            key="back"
+            onClick={onClose}
+            disabled={loading}
+            style={{ width: "20%", marginLeft: "15px" }}
+          >
             {t("cancel")}
           </Button>,
         ]}
         width={width}
         centered
+        style={{
+          margin: "20px 0",
+        }}
       >
         <Form
           initialValues={initialValues}
@@ -79,7 +88,6 @@ const AppFormModal = ({
           onFinishFailed={onFinishFailed}
           autoComplete="off"
           layout="vertical"
-          
         >
           {children}
         </Form>

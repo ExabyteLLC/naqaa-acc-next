@@ -1,7 +1,10 @@
-import { Form, Input, Select } from "antd";
+import { Form, Input, TreeSelect } from "antd";
 import MyGrid from "../../../../assets/modals/grid";
+import useCoaModel from "../../model";
 
 export default function CodeSection({ t }) {
+  const { optionsTree } = useCoaModel();
+  console.log(optionsTree);
   return (
     <MyGrid>
       <Form.Item
@@ -19,16 +22,19 @@ export default function CodeSection({ t }) {
 
       <Form.Item
         label={t("parent")}
-        name="parent"
+        name="parent_id"
         rules={[
           {
             required: false,
           },
         ]}
       >
-        <Select placeholder={t("choose")}>
-          <Select.Option value="1">Text</Select.Option>
-        </Select>
+        <TreeSelect
+          showSearch
+          placeholder={t("choose")}
+          treeDefaultExpandAll
+          treeData={optionsTree}
+        />
       </Form.Item>
     </MyGrid>
   );

@@ -1,6 +1,6 @@
 import { Col, Row } from "antd";
 
-const MyGrid = ({ children, defaultSpan = 12, spacingX = 12, spacingY = 12 }) => {
+const MyGrid = ({ children, defaultSpan = 12, spacingX = 10, spacingY = 10 }) => {
  return (
     <Row gutter={[spacingX, spacingY]}>
       {children.map((child, index) => {

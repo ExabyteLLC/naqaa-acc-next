@@ -14,7 +14,7 @@ const AppFormModal = ({
   initialValues = {},
   buttonIcon = null,
   submitBtnTxt,
-  width = "80%",
+  width = "70%",
 }) => {
   const { t } = useTranslation();
   const [form] = Form.useForm();

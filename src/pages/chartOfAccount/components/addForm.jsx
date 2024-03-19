@@ -7,6 +7,8 @@ import MyGrid from "../../../assets/modals/grid";
 import CodeSection from "./formComponents/codeSection";
 import DescriptionSection from "./formComponents/descriptionSection";
 import AccountSettingSection from "./formComponents/accountSettingSection";
+import AccountReportsSection from "./formComponents/accountReportsSection";
+import AdditionalInfoSection from "./formComponents/additionalInfoSection";
 
 const AddForm = ({ fetchFn }) => {
   const { t } = useTranslation();
@@ -52,10 +54,12 @@ const AddForm = ({ fetchFn }) => {
       loading={dataStatus === "loading"}
       submitBtnTxt={t("add")}
     >
-      <MyGrid spacingY={0}>
-        <CodeSection t={t} fullspan = "true" />
-        <DescriptionSection t={t} fullspan = "true" />
-        <AccountSettingSection t={t} fullspan = "true" />
+      <MyGrid spacingY={24}>
+        <CodeSection t={t} fullspan="true" />
+        <DescriptionSection t={t} fullspan="true" />
+        <AccountSettingSection t={t} fullspan="true" />
+        <AccountReportsSection t={t} fullspan="true" />
+        <AdditionalInfoSection t={t} fullspan="true" />
       </MyGrid>
     </AppFormModal>
   );

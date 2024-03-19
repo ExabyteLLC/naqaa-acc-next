@@ -49,6 +49,9 @@ function App2() {
           Form: {
             itemMarginBottom: 0,
           },
+          Divider: {
+            margin: 0,
+          },
         },
       }}
     >

@@ -3,9 +3,8 @@ import MyGrid from "../../../../assets/modals/grid";
 
 export default function AccountSettingSection({t}) {
   return (
-    <MyGrid spacingY={0}>
+    <MyGrid>
         <Divider
-        style={{ marginTop: 0}}
         orientation="left"
         orientationMargin={10}
         fullspan = "true"

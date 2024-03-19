@@ -2,15 +2,10 @@ import TextArea from "antd/es/input/TextArea";
 import MyGrid from "../../../../assets/modals/grid";
 import { Divider, Form, Input } from "antd";
 
-export default function DescriptionSection({t}) {
+export default function DescriptionSection({ t }) {
   return (
-    <MyGrid spacingY={0}>
-      <Divider
-        style={{ marginTop: 0}}
-        orientation="left"
-        orientationMargin={10}
-        fullspan = "true"
-      >
+    <MyGrid>
+      <Divider orientation="left" orientationMargin={10} fullspan="true">
         {t("description")}
       </Divider>
 

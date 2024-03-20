@@ -3,16 +3,13 @@ import useTranslation from "../../models/translation";
 
 const AppFormModal = ({
   open,
-  onOpen,
   onClose,
   title,
   onFinish,
   onFinishFailed,
   children,
   loading,
-  btnType = "primary",
   initialValues = {},
-  buttonIcon = null,
   submitBtnTxt,
   width = "70%",
 }) => {
@@ -36,9 +33,6 @@ const AppFormModal = ({
 
   return (
     <>
-      <Button disabled={loading ?? false} type={btnType} onClick={onOpen}>
-        {buttonIcon ?? title}
-      </Button>
       <Modal
         title={title}
         open={open}

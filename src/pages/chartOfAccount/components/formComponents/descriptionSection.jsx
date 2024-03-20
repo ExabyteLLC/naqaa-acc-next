@@ -1,8 +1,10 @@
 import TextArea from "antd/es/input/TextArea";
 import MyGrid from "../../../../assets/modals/grid";
 import { Divider, Form, Input } from "antd";
+import useTranslation from "../../../../models/translation";
 
-export default function DescriptionSection({ t }) {
+export default function DescriptionSection() {
+  const { t } = useTranslation();
   return (
     <MyGrid>
       <Divider orientation="left" orientationMargin={10} fullspan="true">

@@ -1,10 +1,11 @@
 import { Form, Input, TreeSelect } from "antd";
 import MyGrid from "../../../../assets/modals/grid";
-import useCoaModel from "../../model";
+import useDataPageModel from "../../../../models/dataPageModel";
+import useTranslation from "../../../../models/translation";
 
-export default function CodeSection({ t }) {
-  const { optionsTree } = useCoaModel();
-  console.log(optionsTree);
+export default function CodeSection() {
+  const { t } = useTranslation();
+  const { treeOptions, formType } = useDataPageModel();
   return (
     <MyGrid>
       <Form.Item
@@ -17,7 +18,11 @@ export default function CodeSection({ t }) {
           },
         ]}
       >
-        <Input type="number" placeholder={t("code")} />
+        <Input
+          type="number"
+          placeholder={t("code")}
+          disabled={formType === "edit"}
+        />
       </Form.Item>
 
       <Form.Item
@@ -33,7 +38,8 @@ export default function CodeSection({ t }) {
           showSearch
           placeholder={t("choose")}
           treeDefaultExpandAll
-          treeData={optionsTree}
+          treeData={treeOptions}
+          disabled={formType === "edit"}
         />
       </Form.Item>
     </MyGrid>

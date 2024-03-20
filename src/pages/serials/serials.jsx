@@ -1,22 +1,20 @@
 import { EditFilled } from "@ant-design/icons";
-import { Flex } from "antd";
+import { Button } from "antd";
 import DataTable from "../../assets/modals/dataTable";
-import EditModal from "./components/EditModal";
 import { Content } from "antd/es/layout/layout";
 import useDataPageModel, { DataPageModel } from "../../models/dataPageModel";
+import PageForm from "./components/PageForm";
 
 const Serials = () => {
   return (
-    <DataPageModel.Provider idKey="serial_id" Route="/admin/accounting/serials">
+    <DataPageModel.Provider IdKey="serial_id" Route="/admin/accounting/serials">
       <Page />
     </DataPageModel.Provider>
   );
 };
 
 const Page = () => {
-  const { data, dataStatus } = useDataPageModel();
-
-  console.log(data);
+  const { data, dataStatus, openEditForm } = useDataPageModel();
 
   const columns = [
     {
@@ -54,21 +52,6 @@ const Page = () => {
       title: "last-modified",
       type: "date",
     },
-    {
-      key: "edit",
-      search: false,
-      render: (_, key) => (
-        <>
-          <Flex align="center" justify="space-around">
-            <EditModal
-              butonType="link"
-              buttonIcon={<EditFilled />}
-              initialValues={key}
-            />
-          </Flex>
-        </>
-      ),
-    },
   ];
 
   return (
@@ -82,7 +65,21 @@ const Page = () => {
             ? "Sorry something went worng. Please, try again later."
             : "No serials found yet."
         }
+        actions={(_, key) => (
+          <>
+            <Button
+              type={"link"}
+              onClick={() => {
+                openEditForm(key);
+              }}
+            >
+              <EditFilled />
+            </Button>
+          </>
+        )}
       />
+
+      <PageForm />
     </Content>
   );
 };

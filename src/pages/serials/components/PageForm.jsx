@@ -3,23 +3,22 @@ import useTranslation from "../../../models/translation";
 import AppFormModal from "../../../assets/modals/formModal";
 import useDataPageModel from "../../../models/dataPageModel";
 
-const EditModal = ({ initialValues, buttonIcon, butonType }) => {
+const PageForm = () => {
   const { t } = useTranslation();
-  const { dataStatus, editModal, setEditModal, updDataApi } =
+  const { dataStatus, currForm, formKey, closeForm, formData, editDataAPI } =
     useDataPageModel();
 
+  console.log(formData);
   return (
     <AppFormModal
-      open={editModal}
-      onOpen={() => setEditModal(true)}
-      onClose={() => setEditModal(false)}
-      title={t("edit")}
-      onFinish={(values) => updDataApi(values, initialValues.id)}
-      onFinishFailed={(errorInfo) => console.log("Failed:", errorInfo)}
-      initialValues={initialValues}
+      key={formKey}
+      open={currForm("main")}
+      onClose={closeForm}
+      initialValues={formData}
       loading={dataStatus === "loading"}
-      buttonIcon={buttonIcon}
-      btnType={butonType}
+      onFinish={(values) => editDataAPI(values, formData.id)}
+      onFinishFailed={(errorInfo) => console.log("Failed:", errorInfo)}
+      title={t("edit")}
       submitBtnTxt={t("update")}
     >
       <Form.Item
@@ -71,4 +70,4 @@ const EditModal = ({ initialValues, buttonIcon, butonType }) => {
   );
 };
 
-export default EditModal;
+export default PageForm;

@@ -1,24 +1,47 @@
-import { Flex, Typography } from "antd";
+import { Button, Flex, Typography } from "antd";
 import { Content } from "antd/es/layout/layout";
 import DataTable from "../../assets/modals/dataTable";
 import useTranslation from "../../models/translation";
 import { DeleteFilled, EditFilled } from "@ant-design/icons";
 import DeleteBtn from "../paymentType/components/DeleteBtn";
-import AddForm from "./components/addForm";
-import useCoaModel, { CoaModel } from "./model";
-import EditForm from "./components/editForm";
+import PageForm from "./components/PageForm";
+import useDataPageModel, { DataPageModel } from "../../models/dataPageModel";
 const { Title } = Typography;
 
 export default function ChartOfAccount() {
+  const { locale } = useTranslation();
   return (
-    <CoaModel.Provider>
+    <DataPageModel.Provider
+      IdKey="account_id"
+      Route="/admin/accounting/accounts"
+      extraFuncs={({ data }) => {
+        const treeOptions = () => {
+          let d2 = [...data];
+          d2 = d2.filter((o) => o.master === 1);
+          let td = listToTree(d2, {
+            additions: (o) => {
+              return {
+                title: `${o.id} - ${locale === "en" ? o.name : o.name_alt}`,
+                value: o.id,
+              };
+            },
+          });
+          return td;
+        };
+        return {
+          treeData: listToTree(data),
+          treeOptions: treeOptions(),
+        };
+      }}
+    >
       <Page />
-    </CoaModel.Provider>
+    </DataPageModel.Provider>
   );
 }
 
 function Page() {
-  const { data, dataStatus, deleteFn, fetchingData } = useCoaModel();
+  const { treeData, dataStatus, delDataApi, openAddForm, openEditForm } =
+    useDataPageModel();
   const { t } = useTranslation();
 
   const columns = [
@@ -162,12 +185,19 @@ function Page() {
     <Content style={{ padding: "20px" }}>
       <Flex justify="space-between" align="center" style={{ width: "100%" }}>
         <Title level={2}>{t("payment-type")}</Title>
-        <AddForm fetchFn={fetchingData} data={data} />
+        <Button
+          type={"primary"}
+          onClick={() => {
+            openAddForm();
+          }}
+        >
+          {t("add-account")}
+        </Button>
       </Flex>
 
       <DataTable
         columns={columns}
-        data={data}
+        data={treeData}
         loading={dataStatus === "loading"}
         emptyText={
           dataStatus === "error"
@@ -176,18 +206,21 @@ function Page() {
         }
         actions={(_, key) => (
           <>
-            <EditForm
-              butonType="link"
-              buttonIcon={<EditFilled />}
-              initialValues={key}
-              fetchFn={fetchingData}
-            />
+            <Button
+              type={"link"}
+              onClick={() => {
+                openEditForm(key);
+              }}
+            >
+              <EditFilled />
+            </Button>
+
             {!key.children && (
               <DeleteBtn
                 title={t("delete")}
                 okText={t("delete")}
                 cancelText={t("cancel")}
-                onConfirm={() => deleteFn(key)}
+                onConfirm={() => delDataApi(key)}
               >
                 <DeleteFilled />
               </DeleteBtn>
@@ -195,6 +228,37 @@ function Page() {
           </>
         )}
       />
+
+      <PageForm />
     </Content>
   );
+}
+
+function listToTree(
+  arr,
+  {
+    currId = "id",
+    parentId = "parent_id",
+    childKey = "children",
+    cValue = null,
+    additions,
+  } = {}
+) {
+  const treeList = [];
+  for (let item of arr) {
+    if (item[parentId] == cValue) {
+      item = { ...item };
+      let children = listToTree(arr, {
+        currId,
+        parentId,
+        childKey,
+        cValue: item[currId],
+        additions,
+      });
+      if (children.length > 0) item[childKey] = children;
+      if (additions) item = { ...item, ...additions(item) };
+      treeList.push(item);
+    }
+  }
+  return treeList;
 }

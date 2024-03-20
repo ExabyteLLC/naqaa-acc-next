@@ -1,8 +1,10 @@
 import { Divider, Form, Select } from "antd";
 import MyGrid from "../../../../assets/modals/grid";
 import SelectOptionGenerator from "./selectOptionGenerator";
+import useTranslation from "../../../../models/translation";
 
-export default function AdditionalInfoSection({ t }) {
+export default function AdditionalInfoSection() {
+  const { t } = useTranslation();
   return (
     <MyGrid>
       <Divider orientation="left" orientationMargin={10} fullspan="true">

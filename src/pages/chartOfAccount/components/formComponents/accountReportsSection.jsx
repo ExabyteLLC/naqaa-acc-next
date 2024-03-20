@@ -1,8 +1,10 @@
 import { Divider, Form, Select } from "antd";
 import MyGrid from "../../../../assets/modals/grid";
 import SelectOptionGenerator from "./selectOptionGenerator";
+import useTranslation from "../../../../models/translation";
 
-export default function AccountReportsSection({ t }) {
+export default function AccountReportsSection() {
+  const { t } = useTranslation();
   return (
     <MyGrid>
       <Divider orientation="left" orientationMargin={10} fullspan="true">
@@ -19,7 +21,10 @@ export default function AccountReportsSection({ t }) {
         ]}
       >
         <Select placeholder={t("choose")}>
-          {SelectOptionGenerator([{ title: "none", key: 0 },{ title: "report_balance_sheet-1", key: 1 }])}
+          {SelectOptionGenerator([
+            { title: "none", key: 0 },
+            { title: "report_balance_sheet-1", key: 1 },
+          ])}
         </Select>
       </Form.Item>
       <Form.Item

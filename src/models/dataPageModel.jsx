@@ -4,12 +4,51 @@ import MyCreateContext from "./context";
 import myFetch from "./fetch";
 
 export const DataPageModel = MyCreateContext(
-  ({ IdKey, Route, autoGet = true, hasDeps = false, extraFuncs }) => {
+  ({
+    IdKey,
+    Route,
+    autoGet = true,
+    hasDeps = false,
+    processGetData,
+    processDepsData,
+    extraFuncs,
+  }) => {
     const [data, setData] = useState([]);
     const [deps, setDeps] = useState({});
     const [dataStatus, setDataStatus] = useState(null);
-    const [addModal, setAddModal] = useState(false);
-    const [editModal, setEditModal] = useState(false);
+
+    const [formKey, setFormKey] = useState(0);
+    const [formOpen, setFormOpen] = useState(null);
+    const [formType, setFormType] = useState(null);
+    const [formData, setFormData] = useState(null);
+
+    const currForm = (name) => {
+      return name === formOpen;
+    };
+    const openAddForm = () => {
+      setFormKey(formKey + 1);
+      setFormData(null);
+      setFormType("add");
+      setFormOpen("main");
+    };
+    const openEditForm = (data) => {
+      setFormKey(formKey + 1);
+      setFormData(data);
+      setFormType("edit");
+      setFormOpen("main");
+    };
+    const openForm = ({ type, data, name } = {}) => {
+      setFormKey(formKey + 1);
+      setFormData(data);
+      setFormType(type);
+      setFormOpen(name);
+    };
+    const closeForm = useCallback(() => {
+      setFormKey(formKey + 1);
+      setFormData(null);
+      setFormType(null);
+      setFormOpen(null);
+    }, [formKey]);
 
     const getDataApi = useCallback(() => {
       setDataStatus("loading");
@@ -19,10 +58,14 @@ export const DataPageModel = MyCreateContext(
         },
         onSuccess: (data) => {
           setDataStatus("fetched");
-          setData(data.data);
+          if (processGetData) {
+            setData(processGetData(data.data));
+          } else {
+            setData(data.data);
+          }
         },
       });
-    }, [Route]);
+    }, [Route, processGetData]);
     const depsDataApi = useCallback(() => {
       setDataStatus("loading");
       myFetch(`${Route}/dependants`, {
@@ -31,10 +74,14 @@ export const DataPageModel = MyCreateContext(
         },
         onSuccess: (data) => {
           setDataStatus("fetched");
-          setDeps(data.data);
+          if (processDepsData) {
+            setDeps(processDepsData(data.data));
+          } else {
+            setDeps(data.data);
+          }
         },
       });
-    }, [Route]);
+    }, [Route, processDepsData]);
     const sendData = useCallback(
       async (values, request = "add") => {
         var fd = serialize(values);
@@ -54,16 +101,16 @@ export const DataPageModel = MyCreateContext(
     const addDataAPI = useCallback(
       (values) => {
         sendData(values, "add");
-        setAddModal(false);
+        closeForm();
       },
-      [sendData]
+      [closeForm, sendData]
     );
     const updDataAPI = useCallback(
       (values, id) => {
         sendData({ [IdKey]: id, ...values }, "update");
-        setEditModal(false);
+        closeForm();
       },
-      [sendData, IdKey]
+      [closeForm, sendData, IdKey]
     );
     const delDataAPI = useCallback(
       ({ id }) => {
@@ -95,11 +142,18 @@ export const DataPageModel = MyCreateContext(
       depsDataApi,
       addDataAPI,
       updDataAPI,
+      editDataAPI: updDataAPI,
       delDataAPI,
-      addModal,
-      setAddModal,
-      editModal,
-      setEditModal,
+
+      formKey,
+      formOpen,
+      formType,
+      formData,
+      currForm,
+      openAddForm,
+      openEditForm,
+      openForm,
+      closeForm,
     };
     return { ...obj, ...(extraFuncs && extraFuncs(obj)) };
   }

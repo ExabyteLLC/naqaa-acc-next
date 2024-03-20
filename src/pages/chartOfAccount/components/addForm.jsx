@@ -1,8 +1,6 @@
 import useTranslation from "../../../models/translation";
 import AppFormModal from "../../../assets/modals/formModal";
 import { useState } from "react";
-import { serialize } from "object-to-formdata";
-import myFetch from "../../../models/fetch";
 import MyGrid from "../../../assets/modals/grid";
 import CodeSection from "./formComponents/codeSection";
 import DescriptionSection from "./formComponents/descriptionSection";
@@ -13,34 +11,16 @@ import useCoaModel from "../model";
 
 const AddForm = () => {
   const { t } = useTranslation();
-  const { fetchingData: fetchFn } = useCoaModel();
+  const { fetchingData: fetchFn,dataStatus,sendData } = useCoaModel();
 
-  const [dataStatus, setDataStatus] = useState(null);
   const [open, setOpen] = useState(false);
 
-  const sendData = async (values) => {
-    var fd = serialize(values);
-    setDataStatus("loading");
-    myFetch("/admin/accounting/accounts/add", {
-      body: fd,
-      onLoad: (res, data) => {
-        if (!res.ok) {
-          setDataStatus("error");
-          return;
-        }
-        if (data.status != 200) {
-          setDataStatus("error");
-          return;
-        }
-        setDataStatus("fetched");
-        fetchFn();
-        setOpen(false);
-      },
-    });
-  };
+  
 
   const onFinish = (values) => {
     sendData(values);
+    fetchFn();
+    setOpen(false);
   };
   const onFinishFailed = (errorInfo) => {
     console.log("Failed:", errorInfo);

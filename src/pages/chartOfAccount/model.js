@@ -68,6 +68,25 @@ export const CoaModel = MyCreateContext(() => {
     });
   }, []);
 
+  const sendData = async (values, request = "add") => {
+    var fd = serialize(values);
+    setDataStatus("loading");
+    myFetch(`/admin/accounting/accounts/${request}`, {
+      body: fd,
+      onLoad: (res, data) => {
+        if (!res.ok) {
+          setDataStatus("error");
+          return;
+        }
+        if (data.status != 200) {
+          setDataStatus("error");
+          return;
+        }
+        setDataStatus("fetched");
+      },
+    });
+  };
+
   const optionsTree = useCallback(() => {
     let d2 = [...data];
     d2 = d2.filter((o) => o.master === 1);
@@ -94,6 +113,7 @@ export const CoaModel = MyCreateContext(() => {
     setDataStatus,
     deleteFn,
     fetchingData,
+    sendData,
     get optionsTree() {
       return optionsTree();
     },

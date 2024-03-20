@@ -8,16 +8,8 @@ export const CoaModel = MyCreateContext(() => {
   const [dataStatus, setDataStatus] = useState(null);
   const [data, setData] = useState([]);
   const { locale } = useTranslation();
+  const idKey = "account_id";
 
-  const deleteFn = ({ id }) => {
-    var fd = serialize({ payment_type_id: id });
-    myFetch("/admin/accounting/accounts/delete", {
-      body: fd,
-      onSuccess: () => {
-        setData((prev) => prev.filter((o) => o.id !== id));
-      },
-    });
-  };
   const listToTree = useCallback(
     (
       arr,
@@ -67,26 +59,28 @@ export const CoaModel = MyCreateContext(() => {
       },
     });
   }, []);
-
   const sendData = async (values, request = "add") => {
     var fd = serialize(values);
     setDataStatus("loading");
     myFetch(`/admin/accounting/accounts/${request}`, {
       body: fd,
-      onLoad: (res, data) => {
-        if (!res.ok) {
-          setDataStatus("error");
-          return;
-        }
-        if (data.status != 200) {
-          setDataStatus("error");
-          return;
-        }
-        setDataStatus("fetched");
+      onError: () => {
+        setDataStatus("error");
+      },
+      onSuccess: () => {
+        fetchingData();
       },
     });
   };
-
+  const deleteFn = ({ id }) => {
+    var fd = serialize({ [idKey]: id });
+    myFetch("/admin/accounting/accounts/delete", {
+      body: fd,
+      onSuccess: () => {
+        setData((prev) => prev.filter((o) => o.id !== id));
+      },
+    });
+  };
   const optionsTree = useCallback(() => {
     let d2 = [...data];
     d2 = d2.filter((o) => o.master === 1);
@@ -113,7 +107,8 @@ export const CoaModel = MyCreateContext(() => {
     setDataStatus,
     deleteFn,
     fetchingData,
-    sendData,
+    addData: (values) => sendData(values, "add"),
+    editData: (values, id) => sendData({ [idKey]: id, ...values }, "update"),
     get optionsTree() {
       return optionsTree();
     },

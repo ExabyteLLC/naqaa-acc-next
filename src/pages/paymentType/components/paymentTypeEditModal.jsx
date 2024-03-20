@@ -33,8 +33,8 @@ const PaymentTypeEditModal = ({
           return;
         }
         setDataStatus("fetched");
-        fetchFn();
         setOpen(false);
+        fetchFn();
       },
     });
   };

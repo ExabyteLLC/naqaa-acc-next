@@ -11,15 +11,12 @@ import useCoaModel from "../model";
 
 const AddForm = () => {
   const { t } = useTranslation();
-  const { fetchingData: fetchFn,dataStatus,sendData } = useCoaModel();
+  const {  dataStatus, addData } = useCoaModel();
 
   const [open, setOpen] = useState(false);
 
-  
-
   const onFinish = (values) => {
-    sendData(values);
-    fetchFn();
+    addData(values);
     setOpen(false);
   };
   const onFinishFailed = (errorInfo) => {

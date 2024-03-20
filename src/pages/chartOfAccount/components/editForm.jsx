@@ -11,14 +11,14 @@ import useCoaModel from "../model";
 
 const EditForm = ({ initialValues, buttonIcon, butonType }) => {
   const { t } = useTranslation();
-  const { fetchingData: fetchFn, sendData,dataStatus } = useCoaModel();
+  const {  editData, dataStatus } = useCoaModel();
 
   const [open, setOpen] = useState(false);
 
   const onFinish = (values) => {
-    sendData({ ...values, account_id: initialValues.id }, "update");
-    fetchFn();
+    editData(values, initialValues.id);
     setOpen(false);
+    
   };
   const onFinishFailed = (errorInfo) => {
     console.log("Failed:", errorInfo);

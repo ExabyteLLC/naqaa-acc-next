@@ -19,7 +19,7 @@ export default function AccountReportsSection({ t }) {
         ]}
       >
         <Select placeholder={t("choose")}>
-          {SelectOptionGenerator([{ title: "balance-sheet", key: 1 }])}
+          {SelectOptionGenerator([{ title: "none", key: 0 },{ title: "report_balance_sheet-1", key: 1 }])}
         </Select>
       </Form.Item>
       <Form.Item

@@ -21,7 +21,7 @@ const AddForm = () => {
   const sendData = async (values) => {
     var fd = serialize(values);
     setDataStatus("loading");
-    myFetch("/admin/accounting/payments/types/add", {
+    myFetch("/admin/accounting/accounts/add", {
       body: fd,
       onLoad: (res, data) => {
         if (!res.ok) {

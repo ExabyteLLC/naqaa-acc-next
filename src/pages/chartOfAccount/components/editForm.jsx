@@ -19,9 +19,9 @@ const EditForm = ({ initialValues, buttonIcon, butonType }) => {
   const [open, setOpen] = useState(false);
 
   const sendData = async (values) => {
-    var fd = serialize(values);
+    var fd = serialize({ ...values, account_id: initialValues.id });
     setDataStatus("loading");
-    myFetch("/admin/accounting/payments/types/add", {
+    myFetch("/admin/accounting/accounts/update", {
       body: fd,
       onLoad: (res, data) => {
         if (!res.ok) {

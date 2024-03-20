@@ -86,6 +86,22 @@ function Page() {
       ],
       width: 200,
     },
+    {
+      title: "account-type",
+      key: "master",
+      type: "int",
+      options: [
+        {
+          label: t("master-1"),
+          value: 1,
+        },
+        {
+          label: t("master-0"),
+          value: 0,
+        },
+      ],
+      width: 200,
+    },
     { title: "description", width: 300 },
     { title:'description-in-arabic',key: "description_alt", width: 300 },
     {

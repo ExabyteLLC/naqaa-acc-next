@@ -1138,5 +1138,7 @@
   "expenses": "Expenses",
   "optional": "optional",
   "range": "Range",
-  "name_alt": "Name_alt"
+  "name_alt": "Name_alt",
+  "input account": "Input Account",
+  "output account": "Output Account"
 }

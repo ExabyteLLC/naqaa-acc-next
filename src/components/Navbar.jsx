@@ -19,6 +19,11 @@ const items = [
     label: "Chart of account",
     key: "/chart-of-account",
   },
+  {
+    label: "Taxes",
+    key: "/taxes",
+  },
+  
 ];
 const App = () => {
   const navigate = useNavigate();

@@ -21,8 +21,8 @@ const PageForm = () => {
       submitBtnTxt={t("update")}
     >
       <Form.Item
-        label={t("name")}
-        name="name"
+        label={t("before")}
+        name="before"
         rules={[
           {
             required: true,
@@ -33,8 +33,8 @@ const PageForm = () => {
       </Form.Item>
 
       <Form.Item
-        label={t("description")}
-        name="description"
+        label={t("after")}
+        name="after"
         rules={[
           {
             required: false,
@@ -42,6 +42,28 @@ const PageForm = () => {
         ]}
       >
         <Input />
+      </Form.Item>
+      <Form.Item
+        label={t("digits")}
+        name="digits"
+        rules={[
+          {
+            required: false,
+          },
+        ]}
+      >
+        <Input type="number" />
+      </Form.Item>
+      <Form.Item
+        label={t("initial")}
+        name="initial"
+        rules={[
+          {
+            required: false,
+          },
+        ]}
+      >
+        <Input type="number" />
       </Form.Item>
     </AppFormModal>
   );

@@ -37,7 +37,6 @@ function App2() {
             headerBg: "#008080",
             headerSortHoverBg: "#008080",
             headerSortActiveBg: "#005353",
-fi
             // borderColor:'#008080'
           },
           Button: {

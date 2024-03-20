@@ -9,7 +9,7 @@ export default function CodeSection({ t }) {
     <MyGrid>
       <Form.Item
         label={t("code")}
-        name="code"
+        name="id"
         rules={[
           {
             required: true,

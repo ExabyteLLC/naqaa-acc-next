@@ -4,9 +4,9 @@ import DataTable from "../../assets/modals/dataTable";
 import useTranslation from "../../models/translation";
 import { DeleteFilled, EditFilled } from "@ant-design/icons";
 import DeleteBtn from "../paymentType/components/DeleteBtn";
-import PaymentTypeEditModal from "../paymentType/components/paymentTypeEditModal";
 import AddForm from "./components/addForm";
 import useCoaModel, { CoaModel } from "./model";
+import EditForm from "./components/editForm";
 const { Title } = Typography;
 
 export default function ChartOfAccount() {
@@ -128,7 +128,7 @@ function Page() {
         }
         actions={(_, key) => (
           <>
-            <PaymentTypeEditModal
+            <EditForm
               butonType="link"
               buttonIcon={<EditFilled />}
               initialValues={key}

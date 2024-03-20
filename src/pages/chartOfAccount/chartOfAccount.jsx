@@ -27,7 +27,7 @@ function Page() {
       type: "int",
     },
     { title: "name", width: 150 },
-    { title:'name-in-arabic',key: "name_alt", width: 150 },
+    { title: "name-in-arabic", key: "name_alt", width: 150 },
     {
       title: "account-nature",
       key: "nature",
@@ -87,23 +87,55 @@ function Page() {
       width: 200,
     },
     {
-      title: "account-type",
-      key: "master",
+      title: "report_balance_sheet-1",
+      key: "report_balance_sheet",
       type: "int",
       options: [
         {
-          label: t("master-1"),
+          label: t("none"),
+          value: 0,
+        },
+        {
+          label: t("report_balance_sheet-1"),
+          value: 1,
+        },
+      ],
+      width: 200,
+    },
+    {
+      title: "report-cash-flow",
+      key: "report_cash_flow",
+      type: "int",
+      options: [
+        {
+          label: t("active"),
           value: 1,
         },
         {
-          label: t("master-0"),
+          label: t("in-active"),
           value: 0,
         },
       ],
       width: 200,
     },
+    {
+      title: "report-income-statement",
+      key: "report_income_statement",
+      type: "int",
+      options: [
+        {
+          label: t("revenue"),
+          value: "revenue",
+        },
+        {
+          label: t("expenses"),
+          value: "expenses",
+        },
+      ],
+      width: 200,
+    },
     { title: "description", width: 300 },
-    { title:'description-in-arabic',key: "description_alt", width: 300 },
+    { title: "description-in-arabic", key: "description_alt", width: 300 },
     {
       title: "status",
       key: "active",

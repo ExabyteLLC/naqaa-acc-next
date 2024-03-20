@@ -16,19 +16,29 @@ const myFetch = async (
   const res = await fetch(URL + url + uId, {
     method: method === "GET" && body ? "POST" : method,
     body,
+    headers: {
+      "User-Timezone": -new Date().getTimezoneOffset(),
+    },
   });
   const data = await res.json();
-  if (onError || onSuccess) {
-    if (!res.ok) {
-      if (onError) onError(`${res.status}: request error!`);
-      return;
-    }
-    if (data.status !== 200) {
-      if (onError) onError(`${data.statusText}: ${data.message}`);
-      return;
-    }
-    onSuccess(data);
+  if (!res.ok) {
+    console.warn(`${res.status}: request error!`);
+    if (onError) onError(`${res.status}: request error!`);
+    return;
   }
+  if (data.status !== 200) {
+    console.warn(
+      `${data.statusText}: ${data.error}, ${JSON.stringify(data.data)}`,
+      data
+    );
+    if (onError)
+      onError(
+        `${data.statusText}: ${data.error}, ${JSON.stringify(data.data)}`,
+        data
+      );
+    return;
+  }
+  if (onSuccess) onSuccess(data);
   if (onLoad) {
     onLoad(res, data);
   }

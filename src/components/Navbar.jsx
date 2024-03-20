@@ -12,8 +12,8 @@ const items = [
     key: "/payment-type",
   },
   {
-    label: "Accounting Year",
-    key: "/accounting-year",
+    label: "Financial Year",
+    key: "/financial-year",
   },
   {
     label: "Chart of account",

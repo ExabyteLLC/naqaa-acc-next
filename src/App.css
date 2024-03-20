@@ -5,3 +5,7 @@
 :where(.css-dev-only-do-not-override-1ae8k9u).ant-btn-primary {
   background-color: #1677ff !important;
 } */
+
+.any {
+  width: 100% !important;
+}

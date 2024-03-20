@@ -1136,5 +1136,7 @@
   "report_balance_sheet-1": "In balance sheet",
   "revenue": "Revenue",
   "expenses": "Expenses",
-  "optional": "optional"
+  "optional": "optional",
+  "range": "Range",
+  "name_alt": "Name_alt"
 }

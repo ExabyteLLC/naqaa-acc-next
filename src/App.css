@@ -9,3 +9,7 @@
 .any {
   width: 100% !important;
 }
+
+table {
+  border-collapse: collapse !important;
+}

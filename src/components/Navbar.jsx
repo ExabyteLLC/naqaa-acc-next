@@ -19,6 +19,10 @@ const items = [
     label: "Chart of account",
     key: "/chart-of-account",
   },
+  {
+    label: "Journal Entries",
+    key: "/journal-entries",
+  },
 ];
 const App = () => {
   const navigate = useNavigate();

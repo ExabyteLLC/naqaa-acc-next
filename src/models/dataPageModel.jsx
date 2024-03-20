@@ -12,6 +12,7 @@ export const DataPageModel = MyCreateContext(
     processGetData,
     processDepsData,
     extraFuncs,
+    getApiRoute = "get",
   }) => {
     const [data, setData] = useState([]);
     const [deps, setDeps] = useState({});
@@ -50,22 +51,26 @@ export const DataPageModel = MyCreateContext(
       setFormOpen(null);
     }, [formKey]);
 
-    const getDataApi = useCallback(() => {
-      setDataStatus("loading");
-      myFetch(`${Route}/get`, {
-        onError: () => {
-          setDataStatus("error");
-        },
-        onSuccess: (data) => {
-          setDataStatus("fetched");
-          if (processGetData) {
-            setData(processGetData(data.data));
-          } else {
-            setData(data.data);
-          }
-        },
-      });
-    }, [Route, processGetData]);
+    const getDataApi = useCallback(
+      (values) => {
+        setDataStatus("loading");
+        myFetch(`${Route}/${getApiRoute}`, {
+          body: values ? serialize(values) : null,
+          onError: () => {
+            setDataStatus("error");
+          },
+          onSuccess: (data) => {
+            setDataStatus("fetched");
+            if (processGetData) {
+              setData(processGetData(data.data));
+            } else {
+              setData(data.data);
+            }
+          },
+        });
+      },
+      [Route, getApiRoute, processGetData]
+    );
     const depsDataApi = useCallback(() => {
       setDataStatus("loading");
       myFetch(`${Route}/dependants`, {

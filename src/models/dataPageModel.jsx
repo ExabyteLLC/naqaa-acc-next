@@ -22,35 +22,43 @@ export const DataPageModel = MyCreateContext(
     const [formKey, setFormKey] = useState(0);
     const [formOpen, setFormOpen] = useState(null);
     const [formType, setFormType] = useState(null);
-    const [formData, setFormData] = useState(null);
+    const [formInitData, setFormInitData] = useState({});
+    const [formData, setFormData] = useState({});
 
     const currForm = (name) => {
       return name === formOpen;
     };
-    const openAddForm = () => {
+    const openAddForm = (data) => {
       setFormKey(formKey + 1);
-      setFormData(null);
+      setFormInitData(data ?? {});
+      setFormData({});
       setFormType("add");
       setFormOpen("main");
     };
     const openEditForm = (data) => {
       setFormKey(formKey + 1);
-      setFormData(data);
+      setFormInitData(data ?? {});
+      setFormData({});
       setFormType("edit");
       setFormOpen("main");
     };
     const openForm = ({ type, data, name } = {}) => {
       setFormKey(formKey + 1);
-      setFormData(data);
+      setFormInitData(data ?? {});
+      setFormData({});
       setFormType(type);
       setFormOpen(name);
     };
     const closeForm = useCallback(() => {
       setFormKey(formKey + 1);
-      setFormData(null);
+      setFormInitData({});
+      setFormData({});
       setFormType(null);
       setFormOpen(null);
     }, [formKey]);
+    const editFormData = useCallback((key, value) => {
+      setFormData((prev) => ({ ...prev, [key]: value }));
+    }, [setFormData]);
 
     const getDataApi = useCallback(
       (values) => {
@@ -156,10 +164,12 @@ export const DataPageModel = MyCreateContext(
       formOpen,
       formType,
       formData,
+      formInitData,
       currForm,
       openAddForm,
       openEditForm,
       openForm,
+      editFormData,
       closeForm,
     };
     return { ...obj, ...(extraFuncs && extraFuncs(obj)) };

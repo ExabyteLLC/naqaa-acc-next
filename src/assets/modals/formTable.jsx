@@ -1,7 +1,7 @@
 import { Button, Flex, Input, Table, TreeSelect, Typography } from "antd";
 import useTranslation from "../../models/translation";
 import { MinusOutlined, PlusOutlined } from "@ant-design/icons";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 const FormTable = ({
   columns,
@@ -11,6 +11,7 @@ const FormTable = ({
   scroll = { x: "max-content" },
   addRowAction = true,
   removeRowAction = true,
+  onChange,
 } = {}) => {
   const { t } = useTranslation();
   const [data, setData] = useState(
@@ -22,6 +23,12 @@ const FormTable = ({
     setId((prev) => prev + 1);
     setData((prev) => [...prev, { ROWID: id + 1 }]);
   };
+  const editRow = (i, data = {}) => {
+    setData((prev) => {
+      prev[i] = { ...prev[i], ...data };
+      return [...prev];
+    });
+  };
   const removeRow = (i) => {
     setData((prev) => {
       prev.splice(i, 1);
@@ -29,8 +36,12 @@ const FormTable = ({
     });
   };
 
+  useEffect(() => {
+    if (onChange) onChange([...data]);
+  }, [onChange, data]);
+
   // cols
-  const cols = columns.map((column) => col(t, column));
+  const cols = columns.map((column) => col(t, column, editRow));
   if (actions || addRowAction || removeRowAction) {
     const actTitle = (function () {
       if (addRowAction) {
@@ -119,20 +130,25 @@ function col(
     onChange,
     required,
     initialValue,
-  }
+  } = {},
+  editRow
 ) {
   key = key ?? title;
   title = title ?? key;
+  name = name ?? key;
 
   const rendered = render
     ? render
-    : (text) => {
+    : (text, _, index) => {
         if (options) {
           return (
             <TreeSelect
               className="antd-formTable-treeselector"
               defaultValue={initialValue ?? text}
-              onChange={onChange}
+              onChange={(val) => {
+                editRow(index, { [name]: val });
+                if (onChange) onChange(val, index);
+              }}
               name={name}
               treeData={options}
               treeDefaultExpandAll
@@ -140,44 +156,26 @@ function col(
               required={required}
             />
           );
-        }
-        switch (type) {
-          case "int":
-          case "double":
-          case "decimal":
-          case "float":
-          case "num":
-            return (
-              <Input
-                type="number"
-                defaultValue={initialValue ?? text}
-                onChange={onChange}
-                name={name}
-                className="antd-formTable-input"
-                required={required}
-              />
-            );
-          case "date":
-            return (
-              <Input
-                type="date"
-                defaultValue={initialValue ?? text}
-                onChange={onChange}
-                name={name}
-                className="antd-formTable-input"
-                required={required}
-              />
-            );
-          default:
-            return (
-              <Input
-                defaultValue={initialValue ?? text}
-                onChange={onChange}
-                name={name}
-                className="antd-formTable-input"
-                required={required}
-              />
-            );
+        } else {
+          var props = { type: "text" };
+          if (["int", "double", "decimal", "float", "num"].includes(type)) {
+            props.type = "number";
+          } else if (["date"].includes(type)) {
+            props.type = "date";
+          }
+          return (
+            <Input
+              defaultValue={initialValue ?? text}
+              onChange={({ target: { value: val } }) => {
+                editRow(index, { [name]: val });
+                if (onChange) onChange(val, index);
+              }}
+              name={name}
+              className="antd-formTable-input"
+              required={required}
+              {...props}
+            />
+          );
         }
       };
 

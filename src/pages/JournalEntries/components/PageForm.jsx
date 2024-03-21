@@ -12,7 +12,7 @@ const PageForm = () => {
     formKey,
     currForm,
     formType,
-    formData,
+    formInitData,
     closeForm,
     dataStatus,
     addDataApi,
@@ -25,14 +25,14 @@ const PageForm = () => {
         addDataApi(values);
         break;
       case "edit":
-        updDataAPI(values, formData.id);
+        updDataAPI(values, formInitData.id);
         break;
     }
   };
   const onFinishFailed = (errorInfo) => {
     console.log("Failed:", errorInfo);
   };
-  console.log(formData);
+
   const title = (() => {
     switch (formType) {
       case "add":
@@ -57,7 +57,7 @@ const PageForm = () => {
       onClose={closeForm}
       onFinish={onFinish}
       onFinishFailed={onFinishFailed}
-      initialValues={formData}
+      initialValues={formInitData}
       loading={dataStatus === "loading"}
       title={title}
       submitBtnTxt={submitBtnTxt}

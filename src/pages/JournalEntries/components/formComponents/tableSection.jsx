@@ -1,9 +1,11 @@
+import { Form } from "antd";
 import FormTable from "../../../../assets/modals/formTable";
 import useDataPageModel from "../../../../models/dataPageModel";
 import MapSelectOptions from "../../../../models/mapSelectOptions";
 
 const App = () => {
-  const { deps, formData } = useDataPageModel();
+  const form = Form.useFormInstance();
+  const { deps, formInitData } = useDataPageModel();
 
   return (
     <FormTable
@@ -35,21 +37,24 @@ const App = () => {
           key: "debit",
           type: "int",
           required: false,
-          onChange: (data) => {
-            console.log(data.currentTarget.value);
-          },
         },
         {
           key: "credit",
           type: "int",
           required: false,
-          onChange: (data) => {
-            console.log(data.currentTarget.value);
-          },
         },
       ]}
-      initData={formData?.transaction_accounts ?? []}
+      initData={formInitData?.transaction_accounts ?? []}
       fullspan="true"
+      onChange={(data) => {
+        var sum = 0;
+        data.forEach((item) => {
+          sum += item.credit - item.debit;
+        });
+        console.log(sum);
+        console.log(form.setFieldValue("sum", sum));
+        console.log(form.getFieldValue("sum"));
+      }}
     />
   );
 };

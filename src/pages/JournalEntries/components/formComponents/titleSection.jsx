@@ -8,8 +8,6 @@ export default function TitleSection() {
   const { t } = useTranslation();
   const { deps } = useDataPageModel();
 
-  console.log(deps.currencies);
-
   return (
     <MyGrid>
       <Form.Item

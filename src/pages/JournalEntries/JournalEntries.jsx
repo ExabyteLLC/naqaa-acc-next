@@ -6,7 +6,7 @@ import { Content } from "antd/es/layout/layout";
 import useTranslation from "../../models/translation";
 import PageForm from "./components/PageForm";
 import SimpleTable from "../../assets/modals/simpleTable";
-const { Title } = Typography;
+const { Title, Text } = Typography;
 
 export default function JournalEntries() {
   const { locale } = useTranslation();
@@ -72,6 +72,10 @@ function Page() {
           };
         }
       },
+      render: (_, data) => {
+        if (data?.transaction_accounts?.length > 0)
+          return <Text strong>{data.addstamp}</Text>;
+      },
     },
     {
       title: "account",
@@ -89,7 +93,7 @@ function Page() {
       },
       render: (_, data) => {
         if (data?.transaction_accounts?.length) {
-          return data.title;
+          return <Text strong>{data.title}</Text>;
         } else {
           return data.account_id;
         }
@@ -193,16 +197,14 @@ function Page() {
               <EditFilled />
             </Button>
 
-            {!key.children && (
-              <DeleteBtn
-                title={t("delete")}
-                okText={t("delete")}
-                cancelText={t("cancel")}
-                onConfirm={() => delDataApi(key)}
-              >
-                <DeleteFilled />
-              </DeleteBtn>
-            )}
+            <DeleteBtn
+              title={t("delete")}
+              okText={t("delete")}
+              cancelText={t("cancel")}
+              onConfirm={() => delDataApi(key)}
+            >
+              <DeleteFilled />
+            </DeleteBtn>
           </>
         )}
         actionOnCell={(data) => {

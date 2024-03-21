@@ -1,6 +1,6 @@
 import { Divider, Form, Select } from "antd";
 import MyGrid from "../../../../assets/modals/grid";
-import SelectOptionGenerator from "./selectOptionGenerator";
+import SelectOptionGenerator from "../../../../models/selectOptionGenerator";
 import useTranslation from "../../../../models/translation";
 
 export default function AccountReportsSection() {

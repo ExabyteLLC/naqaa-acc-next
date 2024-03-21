@@ -1,12 +1,10 @@
 import useTranslation from "../../../models/translation";
 import AppFormModal from "../../../assets/modals/formModal";
 import MyGrid from "../../../assets/modals/grid";
-import CodeSection from "./formComponents/codeSection";
-import DescriptionSection from "./formComponents/descriptionSection";
-import AccountSettingSection from "./formComponents/accountSettingSection";
-import AccountReportsSection from "./formComponents/accountReportsSection";
-import AdditionalInfoSection from "./formComponents/additionalInfoSection";
+import TitleSection from "./formComponents/titleSection";
+import TableSection from "./formComponents/tableSection";
 import useDataPageModel from "../../../models/dataPageModel";
+import SumSection from "./formComponents/sumSection";
 
 const PageForm = () => {
   const { t } = useTranslation();
@@ -62,13 +60,12 @@ const PageForm = () => {
       loading={dataStatus === "loading"}
       title={title}
       submitBtnTxt={submitBtnTxt}
+      width="80%"
     >
       <MyGrid spacingY={12}>
-        <CodeSection fullspan="true" />
-        <DescriptionSection fullspan="true" />
-        <AccountSettingSection fullspan="true" />
-        <AccountReportsSection fullspan="true" />
-        <AdditionalInfoSection fullspan="true" />
+        <TitleSection fullspan="true" />
+        <TableSection fullspan="true" />
+        <SumSection fullspan="true" />
       </MyGrid>
     </AppFormModal>
   );

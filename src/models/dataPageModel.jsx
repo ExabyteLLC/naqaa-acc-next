@@ -17,6 +17,7 @@ export const DataPageModel = MyCreateContext(
     const [data, setData] = useState([]);
     const [deps, setDeps] = useState({});
     const [dataStatus, setDataStatus] = useState(null);
+    const [depsStatus, setDepsStatus] = useState(null);
 
     const [formKey, setFormKey] = useState(0);
     const [formOpen, setFormOpen] = useState(null);
@@ -72,13 +73,13 @@ export const DataPageModel = MyCreateContext(
       [Route, getApiRoute, processGetData]
     );
     const depsDataApi = useCallback(() => {
-      setDataStatus("loading");
+      setDepsStatus("loading");
       myFetch(`${Route}/dependants`, {
         onError: () => {
-          setDataStatus("error");
+          setDepsStatus("error");
         },
         onSuccess: (data) => {
-          setDataStatus("fetched");
+          setDepsStatus("fetched");
           if (processDepsData) {
             setDeps(processDepsData(data.data));
           } else {
@@ -143,6 +144,7 @@ export const DataPageModel = MyCreateContext(
       data,
       deps,
       dataStatus,
+      depsStatus,
       getDataApi,
       depsDataApi,
       addDataAPI,

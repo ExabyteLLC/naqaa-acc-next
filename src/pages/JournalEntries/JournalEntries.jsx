@@ -52,10 +52,15 @@ export default function JournalEntries() {
 
 function Page() {
   const { t } = useTranslation();
-  const { data, deps, dataStatus, openAddForm, openEditForm, delDataApi } =
-    useDataPageModel();
-
-
+  const {
+    data,
+    deps,
+    dataStatus,
+    depsStatus,
+    openAddForm,
+    openEditForm,
+    delDataApi,
+  } = useDataPageModel();
 
   const columns = [
     {
@@ -177,6 +182,7 @@ function Page() {
           onClick={() => {
             openAddForm();
           }}
+          disabled={dataStatus === "loading" || depsStatus === "loading"}
         >
           {t("create-transaction")}
         </Button>

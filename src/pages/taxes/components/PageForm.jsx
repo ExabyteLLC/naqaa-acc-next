@@ -1,4 +1,4 @@
-import { Form, Input } from "antd";
+import { Form, Input, TreeSelect } from "antd";
 import useTranslation from "../../../models/translation";
 import AppFormModal from "../../../assets/modals/formModal";
 import useDataPageModel from "../../../models/dataPageModel";
@@ -6,7 +6,7 @@ import useDataPageModel from "../../../models/dataPageModel";
 const PageForm = () => {
   const { t } = useTranslation();
   const {
-    deps,
+    deps: { treeAccounts },
     dataStatus,
     currForm,
     formKey,
@@ -14,7 +14,6 @@ const PageForm = () => {
     formData,
     editDataAPI,
   } = useDataPageModel();
-
 
   return (
     <AppFormModal
@@ -29,8 +28,8 @@ const PageForm = () => {
       submitBtnTxt={t("update")}
     >
       <Form.Item
-        label={t("before")}
-        name="before"
+        label={t("name")}
+        name="name"
         rules={[
           {
             required: true,
@@ -41,8 +40,8 @@ const PageForm = () => {
       </Form.Item>
 
       <Form.Item
-        label={t("after")}
-        name="after"
+        label={t("description")}
+        name="description"
         rules={[
           {
             required: false,
@@ -51,27 +50,23 @@ const PageForm = () => {
       >
         <Input />
       </Form.Item>
+
       <Form.Item
-        label={t("digits")}
-        name="digits"
+        label={t("input account")}
+        name="input_account_id"
         rules={[
           {
             required: false,
           },
         ]}
       >
-        <Input type="number" />
-      </Form.Item>
-      <Form.Item
-        label={t("initial")}
-        name="initial"
-        rules={[
-          {
-            required: false,
-          },
-        ]}
-      >
-        <Input type="number" />
+        <TreeSelect
+          showSearch
+          placeholder="Please select"
+          allowClear
+          treeDefaultExpandAll
+          treeData={treeAccounts}
+        />
       </Form.Item>
     </AppFormModal>
   );

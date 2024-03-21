@@ -4,7 +4,6 @@ import Navbar from "./components/Navbar.jsx";
 import ChartOfAccount from "./pages/chartOfAccount/chartOfAccount.jsx";
 import FinancialYear from "./pages/FinancialYear/FinancialYear.jsx";
 import Taxes from "./pages/taxes/Taxes.jsx";
-import FinancialYear from "./pages/FinancialYear/FinancialYear.jsx"
 import JournalEntries from "./pages/JournalEntries/JournalEntries.jsx";
 
 const routes = [

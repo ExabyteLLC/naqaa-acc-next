@@ -6,6 +6,7 @@ import { Content } from "antd/es/layout/layout";
 import useTranslation from "../../models/translation";
 import PageForm from "./components/PageForm";
 import SimpleTable from "../../assets/modals/simpleTable";
+import dateFormat, { i18n } from "dateformat";
 const { Title, Text } = Typography;
 
 export default function JournalEntries() {
@@ -54,7 +55,15 @@ function Page() {
   const { data, deps, dataStatus, openAddForm, openEditForm, delDataApi } =
     useDataPageModel();
 
-  console.log(deps);
+  i18n.dayNames = [
+    t("sun"),
+    t("mon"),
+    t("tue"),
+    t("wed"),
+    t("thu"),
+    t("fri"),
+    t("sat"),
+  ];
 
   const columns = [
     {
@@ -74,7 +83,11 @@ function Page() {
       },
       render: (_, data) => {
         if (data?.transaction_accounts?.length > 0)
-          return <Text strong>{data.addstamp}</Text>;
+          return (
+            <Text style={{ fontWeight: "bold" }}>
+              {dateFormat(data.addstamp, "ddd, mmmm dS, yyyy, h:MM:ss TT")}
+            </Text>
+          );
       },
     },
     {
@@ -93,7 +106,7 @@ function Page() {
       },
       render: (_, data) => {
         if (data?.transaction_accounts?.length) {
-          return <Text strong>{data.title}</Text>;
+          return <Text style={{ fontWeight: "bold" }}>{data.title}</Text>;
         } else {
           return data.account_id;
         }

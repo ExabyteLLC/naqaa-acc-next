@@ -6,7 +6,7 @@ import { Content } from "antd/es/layout/layout";
 import useTranslation from "../../models/translation";
 import PageForm from "./components/PageForm";
 import SimpleTable from "../../assets/modals/simpleTable";
-import dateFormat, { i18n } from "dateformat";
+import dateFormat from "dateformat";
 const { Title, Text } = Typography;
 
 export default function JournalEntries() {
@@ -55,15 +55,7 @@ function Page() {
   const { data, deps, dataStatus, openAddForm, openEditForm, delDataApi } =
     useDataPageModel();
 
-  i18n.dayNames = [
-    t("sun"),
-    t("mon"),
-    t("tue"),
-    t("wed"),
-    t("thu"),
-    t("fri"),
-    t("sat"),
-  ];
+
 
   const columns = [
     {

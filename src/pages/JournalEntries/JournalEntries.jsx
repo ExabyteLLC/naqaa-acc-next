@@ -6,11 +6,11 @@ import { Content } from "antd/es/layout/layout";
 import useTranslation from "../../models/translation";
 import PageForm from "./components/PageForm";
 import SimpleTable from "../../assets/modals/simpleTable";
-import dateFormat from "dateformat";
 const { Title, Text } = Typography;
 
 export default function JournalEntries() {
   const { locale } = useTranslation();
+
   return (
     <DataPageModel.Provider
       IdKey="transaction_id"
@@ -52,7 +52,7 @@ export default function JournalEntries() {
 }
 
 function Page() {
-  const { t } = useTranslation();
+  const { t, locale } = useTranslation();
   const {
     data,
     deps,
@@ -83,7 +83,15 @@ function Page() {
         if (data?.transaction_accounts?.length > 0)
           return (
             <Text style={{ fontWeight: "bold" }}>
-              {dateFormat(data.addstamp, "ddd, mmmm dS, yyyy, h:MM:ss TT")}
+              {new Date(data.addstamp).toLocaleDateString(locale, {
+                weekday: "long",
+                year: "numeric",
+                month: "long",
+                day: "numeric",
+                hour: "numeric",
+                minute: "numeric",
+                hour12: true,
+              })}
             </Text>
           );
       },

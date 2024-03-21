@@ -14,7 +14,7 @@ export default function TitleSection() {
     <MyGrid>
       <Form.Item
         label={t("title")}
-        name="id"
+        name="title"
         rules={[
           {
             required: true,

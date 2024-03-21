@@ -5,7 +5,6 @@ import ar from "./assets/locales/ar.json";
 import "./App.css";
 import routes from "./routes";
 import { ConfigProvider } from "antd";
-import { i18n } from "dateformat";
 
 function App() {
   return (
@@ -23,16 +22,8 @@ function App() {
 export default App;
 
 function App2() {
-  const { t, dir } = useTranslation();
-  i18n.dayNames = [
-    t("sun"),
-    t("mon"),
-    t("tue"),
-    t("wed"),
-    t("thu"),
-    t("fri"),
-    t("sat"),
-  ];
+  const { dir } = useTranslation();
+
   return (
     <ConfigProvider
       direction={dir}

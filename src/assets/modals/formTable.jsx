@@ -118,6 +118,7 @@ function col(
     width = "max-content",
     onChange,
     required,
+    initialValue,
   }
 ) {
   key = key ?? title;
@@ -130,7 +131,7 @@ function col(
           return (
             <TreeSelect
               className="antd-formTable-treeselector"
-              defaultValue={text}
+              defaultValue={initialValue ?? text}
               onChange={onChange}
               name={name}
               treeData={options}
@@ -149,7 +150,7 @@ function col(
             return (
               <Input
                 type="number"
-                defaultValue={text}
+                defaultValue={initialValue ?? text}
                 onChange={onChange}
                 name={name}
                 className="antd-formTable-input"
@@ -160,7 +161,7 @@ function col(
             return (
               <Input
                 type="date"
-                defaultValue={text}
+                defaultValue={initialValue ?? text}
                 onChange={onChange}
                 name={name}
                 className="antd-formTable-input"
@@ -170,7 +171,7 @@ function col(
           default:
             return (
               <Input
-                defaultValue={text}
+                defaultValue={initialValue ?? text}
                 onChange={onChange}
                 name={name}
                 className="antd-formTable-input"

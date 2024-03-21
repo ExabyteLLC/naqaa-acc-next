@@ -32,6 +32,7 @@ const PageForm = () => {
   const onFinishFailed = (errorInfo) => {
     console.log("Failed:", errorInfo);
   };
+  console.log(formData);
   const title = (() => {
     switch (formType) {
       case "add":

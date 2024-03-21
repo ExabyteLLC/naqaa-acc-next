@@ -3,7 +3,7 @@ import useDataPageModel, { DataPageModel } from "../../models/dataPageModel";
 import { Content } from "antd/es/layout/layout";
 import DataTable from "../../assets/modals/dataTable";
 import { EditFilled } from "@ant-design/icons";
-import PageForm from "../serials/components/PageForm";
+import PageForm from "./components/PageForm";
 
 const Taxes = () => {
   return (
@@ -11,6 +11,7 @@ const Taxes = () => {
       IdKey="tax_id"
       Route="admin/accounting/taxes"
       hasDeps={true}
+      
     >
       <Page />
     </DataPageModel.Provider>

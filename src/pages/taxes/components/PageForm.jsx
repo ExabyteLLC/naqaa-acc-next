@@ -5,8 +5,16 @@ import useDataPageModel from "../../../models/dataPageModel";
 
 const PageForm = () => {
   const { t } = useTranslation();
-  const { dataStatus, currForm, formKey, closeForm, formData, editDataAPI } =
-    useDataPageModel();
+  const {
+    deps,
+    dataStatus,
+    currForm,
+    formKey,
+    closeForm,
+    formData,
+    editDataAPI,
+  } = useDataPageModel();
+
 
   return (
     <AppFormModal

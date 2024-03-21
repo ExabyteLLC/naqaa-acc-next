@@ -12,10 +12,12 @@ export const DataPageModel = MyCreateContext(
     processGetData,
     processDepsData,
     extraFuncs,
+    getApiRoute = "get",
   }) => {
     const [data, setData] = useState([]);
     const [deps, setDeps] = useState({});
     const [dataStatus, setDataStatus] = useState(null);
+    const [depsStatus, setDepsStatus] = useState(null);
 
     const [formKey, setFormKey] = useState(0);
     const [formOpen, setFormOpen] = useState(null);
@@ -50,30 +52,34 @@ export const DataPageModel = MyCreateContext(
       setFormOpen(null);
     }, [formKey]);
 
-    const getDataApi = useCallback(() => {
-      setDataStatus("loading");
-      myFetch(`${Route}/get`, {
-        onError: () => {
-          setDataStatus("error");
-        },
-        onSuccess: (data) => {
-          setDataStatus("fetched");
-          if (processGetData) {
-            setData(processGetData(data.data));
-          } else {
-            setData(data.data);
-          }
-        },
-      });
-    }, [Route, processGetData]);
+    const getDataApi = useCallback(
+      (values) => {
+        setDataStatus("loading");
+        myFetch(`${Route}/${getApiRoute}`, {
+          body: values ? serialize(values) : null,
+          onError: () => {
+            setDataStatus("error");
+          },
+          onSuccess: (data) => {
+            setDataStatus("fetched");
+            if (processGetData) {
+              setData(processGetData(data.data));
+            } else {
+              setData(data.data);
+            }
+          },
+        });
+      },
+      [Route, getApiRoute, processGetData]
+    );
     const depsDataApi = useCallback(() => {
-      setDataStatus("loading");
+      setDepsStatus("loading");
       myFetch(`${Route}/dependants`, {
         onError: () => {
-          setDataStatus("error");
+          setDepsStatus("error");
         },
         onSuccess: (data) => {
-          setDataStatus("fetched");
+          setDepsStatus("fetched");
           if (processDepsData) {
             setDeps(processDepsData(data.data));
           } else {
@@ -138,6 +144,7 @@ export const DataPageModel = MyCreateContext(
       data,
       deps,
       dataStatus,
+      depsStatus,
       getDataApi,
       depsDataApi,
       addDataAPI,

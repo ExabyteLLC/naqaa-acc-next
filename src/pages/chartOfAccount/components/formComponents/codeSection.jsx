@@ -40,6 +40,7 @@ export default function CodeSection() {
           treeDefaultExpandAll
           treeData={treeOptions}
           disabled={formType === "edit"}
+          popupMatchSelectWidth={false}
         />
       </Form.Item>
     </MyGrid>

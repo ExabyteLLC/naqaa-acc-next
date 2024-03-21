@@ -23,7 +23,10 @@ const items = [
     label: "Taxes",
     key: "/taxes",
   },
-  
+  {
+    label: "Journal Entries",
+    key: "/journal-entries",
+  },
 ];
 const App = () => {
   const navigate = useNavigate();

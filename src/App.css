@@ -1,0 +1,36 @@
+/* @tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:where(.css-dev-only-do-not-override-1ae8k9u).ant-btn-primary {
+  background-color: #1677ff !important;
+} */
+
+.any {
+  width: 100% !important;
+}
+
+table {
+  border-collapse: collapse !important;
+}
+
+.antd-formTable-treeselector {
+  width: 100% !important;
+}
+.antd-formTable-treeselector .ant-select-selector {
+  width: 100% !important;
+  border-radius: 0 !important;
+  border: 0 !important;
+}
+.antd-formTable-treeselector.ant-select-focused .ant-select-selector {
+  box-shadow: none !important;
+}
+
+.antd-formTable-input {
+  width: 100% !important;
+  border-radius: 0 !important;
+  border: 0 !important;
+}
+.antd-formTable-input:focus {
+  box-shadow: none !important;
+}

@@ -1,7 +1,7 @@
 import { Select } from "antd";
-import useTranslation from "../../../../models/translation";
+import useTranslation from "./translation";
 
-export default function SelectOptionGenerator(options = []) {
+export default function SelectOptionGenerator(options = [], translate = true) {
   const { t } = useTranslation();
   return options.map((option) => {
     let title, key;
@@ -14,7 +14,7 @@ export default function SelectOptionGenerator(options = []) {
     }
     return (
       <Select.Option value={key} key={key}>
-        {typeof title === "string" ? t(title) : title}
+        {typeof title === "string" ? (translate ? t(title) : title) : title}
       </Select.Option>
     );
   });

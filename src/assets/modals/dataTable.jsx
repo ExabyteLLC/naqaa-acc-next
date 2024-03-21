@@ -26,6 +26,7 @@ const DataTable = ({
     cols.push({
       key: "actions",
       fixed: "right",
+      align: "center",
       onCell: () => {
         return {
           style: { padding: 0 },

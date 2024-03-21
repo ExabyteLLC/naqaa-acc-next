@@ -4,6 +4,8 @@ import Navbar from "./components/Navbar.jsx";
 import ChartOfAccount from "./pages/chartOfAccount/chartOfAccount.jsx";
 import FinancialYear from "./pages/FinancialYear/FinancialYear.jsx";
 import Taxes from "./pages/taxes/Taxes.jsx";
+import FinancialYear from "./pages/FinancialYear/FinancialYear.jsx"
+import JournalEntries from "./pages/JournalEntries/JournalEntries.jsx";
 
 const routes = [
   {
@@ -15,6 +17,7 @@ const routes = [
       { path: "chart-of-account", element: <ChartOfAccount /> },
       { path: "financial-year", element: <FinancialYear /> },
       { path: "taxes", element: <Taxes /> },
+      { path: "journal-entries", element: <JournalEntries /> },
     ],
   },
 ];

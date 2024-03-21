@@ -35,6 +35,7 @@ export default function JournalEntries() {
               return {
                 title: `${o.id} - ${locale === "en" ? o.name : o.name_alt}`,
                 value: o.id,
+                disabled: o.master === 1,
               };
             },
           });

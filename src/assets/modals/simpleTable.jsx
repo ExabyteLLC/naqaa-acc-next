@@ -20,6 +20,7 @@ const SimpleTable = ({
     cols.push({
       key: "actions",
       fixed: "right",
+      align: "center",
       onCell:
         actionOnCell ||
         (() => {

@@ -64,6 +64,7 @@ const PageForm = () => {
     >
       <MyGrid spacingY={12}>
         <TitleSection fullspan="true" />
+
         <TableSection fullspan="true" />
         <SumSection fullspan="true" />
       </MyGrid>

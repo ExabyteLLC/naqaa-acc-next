@@ -216,7 +216,7 @@ function col(
     },
     onCell: () => {
       return {
-        style: { padding: 0, minWidth: 100 },
+        style: { padding: 0 },
       };
     },
   };

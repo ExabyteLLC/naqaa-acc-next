@@ -1,5 +1,17 @@
-import { Button, Flex, Input, Select, Space, Table, Typography } from "antd";
-import { SearchOutlined } from "@ant-design/icons";
+import {
+  Button,
+  Flex,
+  Input,
+  Space,
+  Table,
+  TreeSelect,
+  Typography,
+} from "antd";
+import {
+  FilterFilled,
+  FilterOutlined,
+  SearchOutlined,
+} from "@ant-design/icons";
 import { FaSort } from "react-icons/fa";
 import { FaSortAmountDownAlt } from "react-icons/fa";
 import { FaSortAmountUpAlt } from "react-icons/fa";
@@ -63,6 +75,7 @@ const DataTable = ({
       }}
       locale={{ emptyText }}
       scroll={scroll}
+      tableLayout="auto"
     />
   );
 };
@@ -145,12 +158,17 @@ function col(
     width,
     render: rendered,
     sorter: sorter,
+    onHeaderCell: () => {
+      return {
+        style: { minWidth: 100 },
+      };
+    },
     onCell: () => {
       return {
         style: { minWidth: 100 },
       };
     },
-    ...getColumnSearchProps(key, search, type, options),
+    ...getColumnSearchProps(key, search, type, options, width ?? 175),
     ...(!!sorter && {
       sortDirections: ["ascend", "descend"],
       sortIcon: ({ sortOrder }) => {
@@ -205,7 +223,7 @@ function getColumnSearchProps(dataIndex, search, type, options) {
           {(function () {
             if (options) {
               return (
-                <Select
+                <TreeSelect
                   placeholder={`Search ${dataIndex}`}
                   value={selectedKeys[0]}
                   onChange={(val) => {
@@ -215,14 +233,12 @@ function getColumnSearchProps(dataIndex, search, type, options) {
                   style={{
                     marginBottom: 8,
                     display: "block",
+                    minWidth: 200,
                   }}
-                >
-                  {options.map((option) => (
-                    <Select.Option key={option?.value} value={option?.value}>
-                      {option?.label}
-                    </Select.Option>
-                  ))}
-                </Select>
+                  showSearch
+                  treeNodeFilterProp="label"
+                  treeData={options}
+                />
               );
             }
             switch (type) {
@@ -243,6 +259,7 @@ function getColumnSearchProps(dataIndex, search, type, options) {
                     style={{
                       marginBottom: 8,
                       display: "block",
+                      minWidth: 200,
                     }}
                   />
                 );
@@ -259,6 +276,7 @@ function getColumnSearchProps(dataIndex, search, type, options) {
                     style={{
                       marginBottom: 8,
                       display: "block",
+                      minWidth: 200,
                     }}
                   />
                 );
@@ -274,6 +292,7 @@ function getColumnSearchProps(dataIndex, search, type, options) {
                     style={{
                       marginBottom: 8,
                       display: "block",
+                      minWidth: 200,
                     }}
                   />
                 );
@@ -319,14 +338,22 @@ function getColumnSearchProps(dataIndex, search, type, options) {
           </Space>
         </div>
       ),
-      filterIcon: (filtered) => (
-        <SearchOutlined
-          style={{
-            color: filtered ? "#fff" : "rgba(255,255,255,0.3)",
-            fontSize: 20,
-          }}
-        />
-      ),
+      filterIcon: (filtered) =>
+        filtered ? (
+          <FilterFilled
+            style={{
+              color: "#fff",
+              fontSize: 20,
+            }}
+          />
+        ) : (
+          <FilterOutlined
+            style={{
+              color: "#fff",
+              fontSize: 20,
+            }}
+          />
+        ),
       onFilter: (value, record) => {
         if (options) {
           return record[dataIndex] === value;

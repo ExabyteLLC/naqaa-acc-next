@@ -3,15 +3,32 @@ import useTranslation from "../../models/translation";
 import { Content } from "antd/es/layout/layout";
 import { DeleteFilled, EditFilled } from "@ant-design/icons";
 import DataTable from "../../assets/modals/dataTable";
-import DeleteBtn from "./components/DeleteBtn";
+import DeleteBtn from "../paymentType/components/DeleteBtn";
 import useDataPageModel, { DataPageModel } from "../../models/dataPageModel";
 import PageForm from "./components/PageForm";
 const { Title } = Typography;
 
-const PaymentTypePage = () => (
+const SalesInvoices = () => (
   <DataPageModel.Provider
-    IdKey="payment_id"
-    Route="/admin/accounting/payments/types"
+    IdKey="invoices_id"
+    Route="/admin/accounting/invoices/sales"
+    hasDeps={true}
+    processGetData={(data) =>
+      data.map((item) => ({
+        ...item,
+        branch: `${item.branch_id} - ${item.branch_name}`,
+      }))
+    }
+    processDepsData={(deps) => {
+      let newDeps = {
+        ...deps,
+        branchesOptions: deps.branches.map((branch) => ({
+          label: branch.name,
+          value: branch.id,
+        })),
+      };
+      return newDeps;
+    }}
   >
     <Page />
   </DataPageModel.Provider>
@@ -19,33 +36,33 @@ const PaymentTypePage = () => (
 
 const Page = () => {
   const { t } = useTranslation();
-  const { data, dataStatus, openAddForm, openEditForm, delDataApi } =
-    useDataPageModel();
+  const {
+    data,
+    deps,
+    dataStatus,
+    depsStatus,
+    openAddForm,
+    openEditForm,
+    delDataApi,
+  } = useDataPageModel();
+
+  // console.log(data);
+  // console.log(deps);
 
   const columns = [
     {
       title: "id",
       type: "int",
     },
-    { title: "name" },
-    { title: "description" },
     {
-      title: "status",
-      key: "active",
-      type: "int",
-      options: [
-        {
-          label: "Active",
-          value: 1,
-          props: { type: "success" },
-        },
-        {
-          label: "Inactive",
-          value: 0,
-          props: { type: "danger" },
-        },
-      ],
+      title: "branches",
+      key: "branch_id",
+      options: deps.branchesOptions,
     },
+    { title: "insurance", key: "reference_insurance_id" },
+    { title: "client", key: "reference_client_id", type: "int" },
+    { title: "total", key: "total_amount", type: "int" },
+
     { title: "added-date", key: "addstamp", type: "date" },
     { title: "last-modified", key: "updatestamp", type: "date" },
   ];
@@ -53,7 +70,7 @@ const Page = () => {
   return (
     <Content style={{ padding: "20px" }}>
       <Flex justify="space-between" align="center" style={{ width: "100%" }}>
-        <Title level={2}>{t("payment-type")}</Title>
+        <Title level={2}>{t("sales-invoices")}</Title>
         <Button
           type={"primary"}
           onClick={() => {
@@ -61,14 +78,14 @@ const Page = () => {
           }}
           disabled={dataStatus === "loading"}
         >
-          {t("add-payment-type")}
+          {t("add-sales-invoice")}
         </Button>
       </Flex>
 
       <DataTable
         columns={columns}
         data={data}
-        loading={dataStatus === "loading"}
+        loading={dataStatus === "loading" || depsStatus === "loading"}
         emptyText={
           dataStatus === "error"
             ? "Sorry something went worng. Please, try again later."
@@ -102,4 +119,4 @@ const Page = () => {
   );
 };
 
-export default PaymentTypePage;
+export default SalesInvoices;

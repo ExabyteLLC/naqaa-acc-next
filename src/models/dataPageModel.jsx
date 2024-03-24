@@ -56,9 +56,12 @@ export const DataPageModel = MyCreateContext(
       setFormType(null);
       setFormOpen(null);
     }, [formKey]);
-    const editFormData = useCallback((key, value) => {
-      setFormData((prev) => ({ ...prev, [key]: value }));
-    }, [setFormData]);
+    const editFormData = useCallback(
+      (key, value) => {
+        setFormData((prev) => ({ ...prev, [key]: value }));
+      },
+      [setFormData]
+    );
 
     const getDataApi = useCallback(
       (values) => {
@@ -80,9 +83,9 @@ export const DataPageModel = MyCreateContext(
       },
       [Route, getApiRoute, processGetData]
     );
-    const depsDataApi = useCallback(() => {
+    const depsDataApi = useCallback(async () => {
       setDepsStatus("loading");
-      myFetch(`${Route}/dependants`, {
+      return await myFetch(`${Route}/dependants`, {
         onError: () => {
           setDepsStatus("error");
         },
@@ -112,21 +115,21 @@ export const DataPageModel = MyCreateContext(
       },
       [Route, getDataApi]
     );
-    const addDataAPI = useCallback(
+    const addDataApi = useCallback(
       (values) => {
         sendData(values, "add");
         closeForm();
       },
       [closeForm, sendData]
     );
-    const updDataAPI = useCallback(
+    const updDataApi = useCallback(
       (values, id) => {
         sendData({ [IdKey]: id, ...values }, "update");
         closeForm();
       },
       [closeForm, sendData, IdKey]
     );
-    const delDataAPI = useCallback(
+    const delDataApi = useCallback(
       ({ id }) => {
         var fd = serialize({ [IdKey]: id });
         myFetch(`${Route}/delete`, {
@@ -140,12 +143,14 @@ export const DataPageModel = MyCreateContext(
     );
 
     useEffect(() => {
-      if (autoGet && !dataStatus) {
-        if (hasDeps) {
-          depsDataApi();
+      (async function () {
+        if (autoGet && !dataStatus) {
+          if (hasDeps) {
+            await depsDataApi();
+          }
+          getDataApi();
         }
-        getDataApi();
-      }
+      })();
     }, [autoGet, dataStatus, getDataApi, depsDataApi, hasDeps]);
 
     const obj = {
@@ -155,10 +160,10 @@ export const DataPageModel = MyCreateContext(
       depsStatus,
       getDataApi,
       depsDataApi,
-      addDataAPI,
-      updDataAPI,
-      editDataAPI: updDataAPI,
-      delDataAPI,
+      addDataApi,
+      updDataApi,
+      editDataApi: updDataApi,
+      delDataApi,
 
       formKey,
       formOpen,

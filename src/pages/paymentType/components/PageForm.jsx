@@ -15,7 +15,7 @@ const PageForm = () => {
     closeForm,
     dataStatus,
     addDataApi,
-    updDataAPI,
+    updDataApi,
   } = useDataPageModel();
 
   const onFinish = (values) => {
@@ -24,7 +24,7 @@ const PageForm = () => {
         addDataApi(values);
         break;
       case "edit":
-        updDataAPI(values, formInitData.id);
+        updDataApi(values, formInitData.id);
         break;
     }
   };

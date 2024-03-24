@@ -1,11 +1,8 @@
+import { Form, Input, Select } from "antd";
 import useTranslation from "../../../models/translation";
 import AppFormModal from "../../../assets/modals/formModal";
+import TextArea from "antd/es/input/TextArea";
 import MyGrid from "../../../assets/modals/grid";
-import CodeSection from "./formComponents/codeSection";
-import DescriptionSection from "./formComponents/descriptionSection";
-import AccountSettingSection from "./formComponents/accountSettingSection";
-import AccountReportsSection from "./formComponents/accountReportsSection";
-import AdditionalInfoSection from "./formComponents/additionalInfoSection";
 import useDataPageModel from "../../../models/dataPageModel";
 
 const PageForm = () => {
@@ -34,10 +31,11 @@ const PageForm = () => {
   const onFinishFailed = (errorInfo) => {
     console.log("Failed:", errorInfo);
   };
+
   const title = (() => {
     switch (formType) {
       case "add":
-        return t("add-account");
+        return t("add-sales-invoice");
       case "edit":
         return t("update");
     }
@@ -60,15 +58,12 @@ const PageForm = () => {
       onFinishFailed={onFinishFailed}
       initialValues={formInitData}
       loading={dataStatus === "loading"}
-      title={title}
       submitBtnTxt={submitBtnTxt}
+      width="80%"
+      title={title}
     >
-      <MyGrid spacingY={12}>
-        <CodeSection fullspan="true" />
-        <DescriptionSection fullspan="true" />
-        <AccountSettingSection fullspan="true" />
-        <AccountReportsSection fullspan="true" />
-        <AdditionalInfoSection fullspan="true" />
+      <MyGrid defaultSpan={24} spacingY={24}>
+        
       </MyGrid>
     </AppFormModal>
   );

@@ -184,7 +184,7 @@ function Page() {
   return (
     <Content style={{ padding: "20px" }}>
       <Flex justify="space-between" align="center" style={{ width: "100%" }}>
-        <Title level={2}>{t("payment-type")}</Title>
+        <Title level={2}>{t("chart-of-accounts")}</Title>
         <Button
           type={"primary"}
           onClick={() => {

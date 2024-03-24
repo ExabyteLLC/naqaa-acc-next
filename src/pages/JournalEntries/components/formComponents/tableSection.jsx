@@ -20,9 +20,10 @@ const App = () => {
         {
           key: "currency",
           name: "account_transaction_currency_id",
-          options: MapSelectOptions(deps.currencies, { titleKey: "symbol" }),
+          options: MapSelectOptions(deps.currencies, { titleKey: "id" }),
           initialValue: "EGP",
           required: true,
+          width: 80,
         },
         {
           key: "rate",
@@ -30,6 +31,7 @@ const App = () => {
           name: "currency_rate",
           initialValue: 1,
           required: true,
+          width: 60,
         },
         {
           key: "description",
@@ -40,11 +42,13 @@ const App = () => {
           key: "debit",
           type: "int",
           required: false,
+          width: 100,
         },
         {
           key: "credit",
           type: "int",
           required: false,
+          width: 100,
         },
       ]}
       initData={formInitData?.transaction_accounts ?? []}

@@ -1,7 +1,7 @@
 import { createElement, createContext, useContext } from "react";
 
 const MyCreateContext = (value = () => {}) => {
-  const Context = createContext(undefined);
+  const Context = createContext({});
   // eslint-disable-next-line react/prop-types
   const Provider = (props) => {
     return createElement(

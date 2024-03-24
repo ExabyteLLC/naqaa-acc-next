@@ -5,7 +5,7 @@ import useDataPageModel from "../../../models/dataPageModel";
 
 const PageForm = () => {
   const { t } = useTranslation();
-  const { dataStatus, currForm, formKey, closeForm, formInitData, editDataAPI } =
+  const { dataStatus, currForm, formKey, closeForm, formInitData, editDataApi } =
     useDataPageModel();
 
   return (
@@ -15,7 +15,7 @@ const PageForm = () => {
       onClose={closeForm}
       initialValues={formInitData}
       loading={dataStatus === "loading"}
-      onFinish={(values) => editDataAPI(values, formInitData.id)}
+      onFinish={(values) => editDataApi(values, formInitData.id)}
       onFinishFailed={(errorInfo) => console.log("Failed:", errorInfo)}
       title={t("edit")}
       submitBtnTxt={t("update")}

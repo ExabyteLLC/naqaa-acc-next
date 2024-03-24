@@ -23,6 +23,10 @@ const items = [
     label: "Journal Entries",
     key: "/journal-entries",
   },
+  {
+    label: "Sales Invoices",
+    key: "/sales-invoices",
+  },
 ];
 const App = () => {
   const navigate = useNavigate();

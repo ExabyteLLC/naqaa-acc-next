@@ -1,13 +1,19 @@
-import { Form, Input, Select } from "antd";
 import useTranslation from "../../../models/translation";
 import AppFormModal from "../../../assets/modals/formModal";
-import TextArea from "antd/es/input/TextArea";
 import MyGrid from "../../../assets/modals/grid";
 import useDataPageModel from "../../../models/dataPageModel";
+import { Form, Select } from "antd";
+import SelectOptionGenerator from "../../../models/selectOptionGenerator";
+import SenderInfo from "./formComponents/senderInfo";
+import RecepientInfo from "./formComponents/RecepientInfo";
+import Services from "./formComponents/Services";
+import Tax from "./formComponents/Tax";
+import Dues from "./formComponents/Dues";
 
 const PageForm = () => {
   const { t } = useTranslation();
   const {
+    deps,
     formKey,
     currForm,
     formType,
@@ -63,7 +69,21 @@ const PageForm = () => {
       title={title}
     >
       <MyGrid defaultSpan={24} spacingY={24}>
-        
+        <Form.Item label={t("currency")} required>
+          <Select placeholder={t("choose")}>
+            {SelectOptionGenerator(
+              deps?.currencies?.map((curr) => {
+                return { title: curr.symbol, key: curr.id };
+              }),
+              false
+            )}
+          </Select>
+        </Form.Item>
+        <SenderInfo />
+        <RecepientInfo />
+        <Services fullspan="true" />
+        <Tax fullspan="true" />
+        <Dues fullspan="true" />
       </MyGrid>
     </AppFormModal>
   );

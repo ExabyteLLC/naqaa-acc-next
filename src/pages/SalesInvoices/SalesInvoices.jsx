@@ -76,7 +76,7 @@ const Page = () => {
           onClick={() => {
             openAddForm();
           }}
-          disabled={dataStatus === "loading"}
+          disabled={dataStatus === "loading" || depsStatus === "loading"}
         >
           {t("add-sales-invoice")}
         </Button>

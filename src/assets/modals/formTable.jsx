@@ -4,7 +4,7 @@ import { MinusOutlined, PlusOutlined } from "@ant-design/icons";
 import { useEffect, useState } from "react";
 
 const FormTable = ({
-  columns,
+  columns = [],
   initData = [],
   emptyText = "",
   actions = null,

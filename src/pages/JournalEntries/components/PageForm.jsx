@@ -15,14 +15,15 @@ const PageForm = () => {
     formInitData,
     closeForm,
     dataStatus,
-    addDataApi,
+    addDataAPI,
     updDataAPI,
   } = useDataPageModel();
 
   const onFinish = (values) => {
+    console.log(values, addDataAPI);
     switch (formType) {
       case "add":
-        addDataApi(values);
+        addDataAPI(values);
         break;
       case "edit":
         updDataAPI(values, formInitData.id);

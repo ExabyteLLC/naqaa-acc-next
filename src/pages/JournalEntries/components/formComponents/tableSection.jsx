@@ -19,6 +19,7 @@ const App = () => {
         },
         {
           key: "currency",
+          name: "account_transaction_currency_id",
           options: MapSelectOptions(deps.currencies, { titleKey: "symbol" }),
           initialValue: "EGP",
           required: true,
@@ -26,11 +27,13 @@ const App = () => {
         {
           key: "rate",
           type: "int",
+          name: "currency_rate",
           initialValue: 1,
           required: true,
         },
         {
           key: "description",
+          name: "account_transaction_description",
           required: true,
         },
         {
@@ -49,7 +52,7 @@ const App = () => {
       onChange={(data) => {
         var sum = 0;
         data.forEach((item) => {
-          sum += item.credit - item.debit;
+          sum += (item.credit ?? 0) - (item.debit ?? 0);
         });
         form.setFieldValue("sum", sum);
       }}

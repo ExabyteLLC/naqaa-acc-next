@@ -1,4 +1,4 @@
-import { Button, Flex, Input, Table, TreeSelect, Typography } from "antd";
+import { Button, Flex, Form, Input, Table, TreeSelect, Typography } from "antd";
 import useTranslation from "../../models/translation";
 import { MinusOutlined, PlusOutlined } from "@ant-design/icons";
 import { useEffect, useState } from "react";
@@ -69,7 +69,7 @@ const FormTable = ({
         return {
           style: {
             padding: 5,
-            backgroundColor: "rgba(0, 128, 128, 0.25)",
+            backgroundColor: "#BFDFDF",
             color: "#333",
           },
         };
@@ -130,6 +130,7 @@ function col(
     onChange,
     required,
     initialValue,
+    rules,
   } = {},
   editRow
 ) {
@@ -137,48 +138,52 @@ function col(
   title = title ?? key;
   name = name ?? key;
 
-  const rendered = render
-    ? render
-    : (text, _, index) => {
-        if (options) {
-          return (
-            <TreeSelect
-              className="antd-formTable-treeselector"
-              defaultValue={initialValue ?? text}
-              onChange={(val) => {
-                editRow(index, { [name]: val });
-                if (onChange) onChange(val, index);
-              }}
-              name={name}
-              treeData={options}
-              treeDefaultExpandAll
-              popupMatchSelectWidth={false}
-              required={required}
-            />
-          );
-        } else {
-          var props = { type: "text" };
-          if (["int", "double", "decimal", "float", "num"].includes(type)) {
-            props.type = "number";
-          } else if (["date"].includes(type)) {
-            props.type = "date";
-          }
-          return (
-            <Input
-              defaultValue={initialValue ?? text}
-              onChange={({ target: { value: val } }) => {
-                editRow(index, { [name]: val });
-                if (onChange) onChange(val, index);
-              }}
-              name={name}
-              className="antd-formTable-input"
-              required={required}
-              {...props}
-            />
-          );
+  const defaultRender = (text, _, index) => {
+    const input = (function () {
+      if (options) {
+        return (
+          <TreeSelect
+            className="antd-formTable-treeselector"
+            onChange={(val) => {
+              editRow(index, { [name]: val });
+              if (onChange) onChange(val, index);
+            }}
+            treeData={options}
+            treeDefaultExpandAll
+            popupMatchSelectWidth={false}
+          />
+        );
+      } else {
+        var props = { type: "text" };
+        if (["int", "double", "decimal", "float", "num"].includes(type)) {
+          props.type = "number";
+        } else if (["date"].includes(type)) {
+          props.type = "date";
         }
-      };
+        return (
+          <Input
+            onChange={({ target: { value: val } }) => {
+              editRow(index, { [name]: val });
+              if (onChange) onChange(val, index);
+            }}
+            className="antd-formTable-input"
+            {...props}
+          />
+        );
+      }
+    })();
 
+    return (
+      <Form.Item
+        name={`${name}[${index}]`}
+        rules={rules}
+        initialValue={initialValue ?? text}
+        required={required}
+      >
+        {input}
+      </Form.Item>
+    );
+  };
   const customizeRequiredMark = (label, { required }) => (
     <p style={{ marginTop: 0, marginBottom: 0 }}>
       <Typography.Text>{label}</Typography.Text>{" "}
@@ -199,12 +204,12 @@ function col(
     dataIndex: key,
     key: key,
     width,
-    render: rendered,
+    render: render ?? defaultRender,
     onHeaderCell: () => {
       return {
         style: {
           padding: 5,
-          backgroundColor: "rgba(0, 128, 128, 0.25)",
+          backgroundColor: "#BFDFDF",
           color: "#333",
         },
       };

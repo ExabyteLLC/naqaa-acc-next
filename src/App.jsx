@@ -45,6 +45,7 @@ function App2() {
             colorLink: "#008080",
             colorLinkHover: "#005353",
             colorBorder: "#008080",
+            colorLinkActive: "#005353",
           },
           Form: {
             itemMarginBottom: 0,

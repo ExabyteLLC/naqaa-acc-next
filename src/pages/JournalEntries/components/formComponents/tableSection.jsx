@@ -51,9 +51,7 @@ const App = () => {
         data.forEach((item) => {
           sum += item.credit - item.debit;
         });
-        console.log(sum);
-        console.log(form.setFieldValue("sum", sum));
-        console.log(form.getFieldValue("sum"));
+        form.setFieldValue("sum", sum);
       }}
     />
   );

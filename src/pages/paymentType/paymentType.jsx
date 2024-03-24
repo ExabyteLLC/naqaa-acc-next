@@ -1,52 +1,26 @@
-import { Flex, Typography } from "antd";
+import { Button, Flex, Typography } from "antd";
 import useTranslation from "../../models/translation";
 import { Content } from "antd/es/layout/layout";
-import { useEffect, useState } from "react";
 import { DeleteFilled, EditFilled } from "@ant-design/icons";
-import PaymentTypeModal from "./components/paymentTypeModal";
-import myFetch from "../../models/fetch";
 import DataTable from "../../assets/modals/dataTable";
-import PaymentTypeEditModal from "./components/paymentTypeEditModal";
 import DeleteBtn from "./components/DeleteBtn";
-import { serialize } from "object-to-formdata";
+import useDataPageModel, { DataPageModel } from "../../models/dataPageModel";
+import PageForm from "./components/PageForm";
 const { Title } = Typography;
 
-const PaymentTypePage = () => {
-  const [dataStatus, setDataStatus] = useState(null);
-  const [data, setData] = useState([]);
+const PaymentTypePage = () => (
+  <DataPageModel.Provider
+    IdKey="payment_id"
+    Route="/admin/accounting/payments/types"
+  >
+    <Page />
+  </DataPageModel.Provider>
+);
+
+const Page = () => {
   const { t } = useTranslation();
-
-  const deleteFn = ({ id }) => {
-    var fd = serialize({ payment_type_id: id });
-    myFetch("/admin/accounting/payments/types/delete", {
-      body: fd,
-      onSuccess: () => {
-        setData((prev) => prev.filter((o) => o.id !== id));
-      },
-    });
-  };
-
-  const fetchingData = () => {
-    setDataStatus("loading");
-    myFetch("/admin/accounting/payments/types/get", {
-      onLoad: (res, api) => {
-        if (!res.ok) {
-          setDataStatus("error");
-          return;
-        }
-        if (api.statusText !== "OK") {
-          setDataStatus("error");
-          return;
-        }
-        setDataStatus("fetched");
-        setData(api.data);
-      },
-    });
-  };
-
-  useEffect(() => {
-    if (!dataStatus) fetchingData();
-  }, [dataStatus, data]);
+  const { data, dataStatus, openAddForm, openEditForm, delDataApi } =
+    useDataPageModel();
 
   const columns = [
     {
@@ -81,17 +55,19 @@ const PaymentTypePage = () => {
         return (
           <>
             <Flex align="center" justify="space-around">
-              <PaymentTypeEditModal
-                butonType="link"
-                buttonIcon={<EditFilled />}
-                initialValues={key}
-                fetchFn={fetchingData}
-              />
+              <Button
+                type={"link"}
+                onClick={() => {
+                  openEditForm(key);
+                }}
+              >
+                <EditFilled />
+              </Button>
               <DeleteBtn
                 title={t("delete")}
                 okText={t("delete")}
                 cancelText={t("cancel")}
-                onConfirm={() => deleteFn(key)}
+                onConfirm={() => delDataApi(key)}
               >
                 <DeleteFilled />
               </DeleteBtn>
@@ -106,7 +82,15 @@ const PaymentTypePage = () => {
     <Content style={{ padding: "20px" }}>
       <Flex justify="space-between" align="center" style={{ width: "100%" }}>
         <Title level={2}>{t("payment-type")}</Title>
-        <PaymentTypeModal fetchFn={fetchingData} />
+        <Button
+          type={"primary"}
+          onClick={() => {
+            openAddForm();
+          }}
+          disabled={dataStatus === "loading"}
+        >
+          {t("add-payment-type")}
+        </Button>
       </Flex>
 
       <DataTable
@@ -120,6 +104,7 @@ const PaymentTypePage = () => {
         }
         scroll={false}
       />
+      <PageForm />
     </Content>
   );
 };

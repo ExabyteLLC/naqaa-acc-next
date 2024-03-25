@@ -62,7 +62,6 @@ const PageForm = () => {
       loading={dataStatus === "loading"}
       title={title}
       submitBtnTxt={submitBtnTxt}
-      width="80%"
     >
       <MyGrid spacingY={12}>
         <TitleSection fullspan="true" />

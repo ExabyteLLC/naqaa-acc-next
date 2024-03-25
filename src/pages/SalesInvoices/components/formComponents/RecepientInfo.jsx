@@ -1,43 +1,78 @@
-import { Divider, Form, Input, Select } from "antd";
+import { Divider, Form } from "antd";
 import useTranslation from "../../../../models/translation";
 import MyGrid from "../../../../assets/modals/grid";
-import SelectOptionGenerator from "../../../../models/selectOptionGenerator";
 import useDataPageModel from "../../../../models/dataPageModel";
+import {
+  FormItemSelect,
+  FormItemInput,
+} from "../../../../assets/modals/formItem";
 
 export default function RecepientInfo() {
   const { t } = useTranslation();
-  const { deps } = useDataPageModel();
-  console.log(deps);
+  const { deps, editFormData } = useDataPageModel();
+  const form = Form.useFormInstance();
+
   return (
     <MyGrid defaultSpan={12}>
       <Divider orientation="left" orientationMargin={10} fullspan="true">
         {t("recepient-info")}
       </Divider>
 
-      <Form.Item label={t("insurance")} required>
-        <Select placeholder={t("choose")}></Select>
-      </Form.Item>
+      <FormItemSelect
+        name="reference_insurance_id"
+        label={t("insurance")}
+        placeholder={t("choose") + " " + t("insurance")}
+        required
+        options={deps.insurances}
+        optionsTitleRender={(o) => `${o.account_id} - ${o.name}`}
+        onChange={(val, item) => {
+          form.setFieldValue("insurance_code", item?.account_id);
+          form.setFieldValue("insurance_name", item?.name_alt);
+          editFormData("ins", val);
+        }}
+      />
 
-      <Form.Item label={t("insurance-code")} required>
-        <Input placeholder={t("enter") + " " + t("insurance-code")} />
-      </Form.Item>
-      
-      <Form.Item label={t("insurance-name")} required>
-        <Input placeholder={t("enter") + " " + t("insurance-name")} />
-      </Form.Item>
-      
-      <Form.Item label={t("client")} required>
-        <Select placeholder={t("choose")}></Select>
-      </Form.Item>
+      <FormItemInput
+        label={t("insurance-code")}
+        required
+        name="insurance_code"
+        placeholder={t("enter") + " " + t("insurance-code")}
+      />
 
-      <Form.Item label={t("client-name")} required>
-        <Input placeholder={t("enter") + " " + t("client-name")} />
-      </Form.Item>
-      
-      <Form.Item label={t("client-id")} required>
-        <Input placeholder={t("enter") + " " + t("client-id")} type="number" />
-      </Form.Item>
+      <FormItemInput
+        label={t("insurance-name")}
+        name="insurance_name"
+        required
+        placeholder={t("enter") + " " + t("insurance-name")}
+      />
 
+      <FormItemSelect
+        label={t("client")}
+        name="reference_client_id"
+        required
+        placeholder={t("choose") + " " + t("insurance")}
+        options={deps.clients}
+        optionsTitleRender={(o) => `${o.id_num} - ${o.name}`}
+        onChange={(val, item) => {
+          form.setFieldValue("client_name", item?.name);
+          form.setFieldValue("client_id", item?.id);
+        }}
+      />
+
+      <FormItemInput
+        label={t("client-name")}
+        name="client_name"
+        required
+        placeholder={t("enter") + " " + t("client-name")}
+      />
+
+      <FormItemInput
+        label={t("client-id")}
+        name="client_id"
+        required
+        placeholder={t("enter") + " " + t("client-id")}
+        type="number"
+      />
     </MyGrid>
   );
 }

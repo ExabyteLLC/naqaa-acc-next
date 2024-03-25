@@ -9,8 +9,6 @@ import SimpleTable from "../../assets/modals/simpleTable";
 const { Title, Text } = Typography;
 
 export default function JournalEntries() {
-  const { locale } = useTranslation();
-
   return (
     <DataPageModel.Provider
       IdKey="transaction_id"
@@ -26,24 +24,6 @@ export default function JournalEntries() {
           }
         }
         return arr;
-      }}
-      processDepsData={(data) => {
-        const treeOptions = (d) => {
-          let d2 = [...d];
-          let td = listToTree(d2, {
-            additions: (o) => {
-              return {
-                title: `${o.id} - ${locale === "en" ? o.name : o.name_alt}`,
-                value: o.id,
-                disabled: o.master === 1,
-              };
-            },
-          });
-          return td;
-        };
-
-        data.treeAccounts = treeOptions(data.accounts);
-        return data;
       }}
     >
       <Page />
@@ -252,33 +232,4 @@ function Page() {
       <PageForm />
     </Content>
   );
-}
-
-function listToTree(
-  arr,
-  {
-    currId = "id",
-    parentId = "parent_id",
-    childKey = "children",
-    cValue = null,
-    additions,
-  } = {}
-) {
-  const treeList = [];
-  for (let item of arr) {
-    if (item[parentId] == cValue) {
-      item = { ...item };
-      let children = listToTree(arr, {
-        currId,
-        parentId,
-        childKey,
-        cValue: item[currId],
-        additions,
-      });
-      if (children.length > 0) item[childKey] = children;
-      if (additions) item = { ...item, ...additions(item) };
-      treeList.push(item);
-    }
-  }
-  return treeList;
 }

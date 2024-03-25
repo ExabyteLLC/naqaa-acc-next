@@ -20,12 +20,19 @@ const SalesInvoices = () => (
       }))
     }
     processDepsData={(deps) => {
+      var servicesInGroups = {};
+      for (let gs of deps.groups_services) {
+        if (!servicesInGroups[gs.group_id]) servicesInGroups[gs.group_id] = [];
+        servicesInGroups[gs.group_id].push(gs.service_id);
+      }
+
       let newDeps = {
         ...deps,
         branchesOptions: deps.branches.map((branch) => ({
           label: branch.name,
           value: branch.id,
         })),
+        servicesInGroups,
       };
       return newDeps;
     }}

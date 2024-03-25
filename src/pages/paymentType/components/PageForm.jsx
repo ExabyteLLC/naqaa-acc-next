@@ -59,7 +59,6 @@ const PageForm = () => {
       initialValues={formInitData}
       loading={dataStatus === "loading"}
       submitBtnTxt={submitBtnTxt}
-      width="80%"
       title={title}
     >
       <MyGrid defaultSpan={24} spacingY={24}>

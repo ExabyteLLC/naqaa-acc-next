@@ -8,9 +8,6 @@ export default function Tax() {
   const { t } = useTranslation();
   const { deps, formInitData } = useDataPageModel();
 
-  console.log(deps.taxes)
-  console.log(formInitData.invoice_taxes)
-
   return (
     <MyGrid defaultSpan={24}>
       <Divider orientation="left" orientationMargin={10}>

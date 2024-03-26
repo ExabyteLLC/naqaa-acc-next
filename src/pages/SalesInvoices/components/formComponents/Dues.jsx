@@ -9,10 +9,10 @@ export default function Dues() {
       <Divider orientation="left" orientationMargin={10} fullspan="true">
         {t("dues")}
       </Divider>
-      <Form.Item label={t("sub-amount")} required>
+      <Form.Item label={t("sub-amount")} required name='sub_amount'>
         <Input readOnly />
       </Form.Item>
-      <Form.Item label={t("total-amount")} required>
+      <Form.Item label={t("total-amount")} required name='total_amount'>
         <Input readOnly />
       </Form.Item>
     </MyGrid>

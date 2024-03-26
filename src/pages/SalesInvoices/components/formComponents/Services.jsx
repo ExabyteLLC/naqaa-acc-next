@@ -7,7 +7,7 @@ import useDataPageModel from "../../../../models/dataPageModel";
 export default function Services() {
   const { t } = useTranslation();
   const form = Form.useFormInstance();
-  const { deps, formData } = useDataPageModel();
+  const { deps, formData, formInitData } = useDataPageModel();
 
   return (
     <MyGrid defaultSpan={24}>
@@ -21,7 +21,7 @@ export default function Services() {
         }}
         columns={[
           {
-            key: "group_id",
+            key: "service_group_id",
             title: "group",
             options: deps.service_groups.filter(
               (o) => o.organization_id === formData.ins
@@ -34,6 +34,7 @@ export default function Services() {
           },
           {
             title: "service",
+            key:'service_id',
             options: deps.clinic_services,
             onChange: ({ index, option }) => {
               form.setFieldValue(`service_name[${index}]`, option?.name_alt);
@@ -57,7 +58,6 @@ export default function Services() {
           },
           {
             title: "service",
-            key: "service_name",
             required: true,
           },
           {
@@ -66,6 +66,7 @@ export default function Services() {
             required: true,
           },
         ]}
+        initData={formInitData.invoice_services ?? []}
       />
     </MyGrid>
   );

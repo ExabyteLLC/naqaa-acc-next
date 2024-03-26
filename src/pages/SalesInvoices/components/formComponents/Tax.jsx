@@ -6,7 +6,10 @@ import useDataPageModel from "../../../../models/dataPageModel";
 
 export default function Tax() {
   const { t } = useTranslation();
-  const { deps } = useDataPageModel();
+  const { deps, formInitData } = useDataPageModel();
+
+  console.log(deps.taxes)
+  console.log(formInitData.invoice_taxes)
 
   return (
     <MyGrid defaultSpan={24}>
@@ -19,7 +22,7 @@ export default function Tax() {
         removeRowAction={false}
         columns={[
           {
-            key: "id",
+            key: "tax_id",
             title: "tax",
             required: true,
             width: 250,
@@ -37,7 +40,7 @@ export default function Tax() {
             required: true,
           },
         ]}
-        initData={deps.taxes}
+        initData={formInitData.invoice_taxes}
       />
     </MyGrid>
   );
